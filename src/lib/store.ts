@@ -1,95 +1,46 @@
 /**
- * In-memory store for newsletter subscribers, contact inquiries, and
- * affiliate click events. In a production deployment this would be swapped
- * for a database. For the demo, an in-memory store is sufficient and lets
- * every endpoint return realistic responses.
+ * Persistent store for newsletter subscribers, contact inquiries, and
+ * affiliate click events. Backed by SQLite (via repos.ts).
  */
-
-export interface ClickEvent {
-  id: string;
-  productSlug: string;
-  source?: string;
-  referer?: string;
-  userAgent?: string;
-  createdAt: string;
-}
-
-export interface Subscriber {
-  email: string;
-  source?: string;
-  createdAt: string;
-}
-
-export interface Inquiry {
-  id: string;
-  name: string;
-  email: string;
-  subject: string;
-  message: string;
-  createdAt: string;
-}
-
-declare global {
-  // eslint-disable-next-line no-var
-  var __regeneralive_store:
-    | {
-        clicks: ClickEvent[];
-        subscribers: Map<string, Subscriber>;
-        inquiries: Inquiry[];
-      }
-    | undefined;
-}
-
-const store =
-  globalThis.__regeneralive_store ??
-  (globalThis.__regeneralive_store = {
-    clicks: [],
-    subscribers: new Map(),
-    inquiries: [],
-  });
-
-function id() {
-  return Math.random().toString(36).slice(2, 10);
-}
+import {
+  logClick as repoLogClick,
+  addNewsletterSignup,
+  addContactMessage,
+  listNewsletterSignups,
+  listContactMessages,
+  totalClicks,
+} from "./repos";
 
 export function logClick(input: {
   productSlug: string;
   source?: string;
   referer?: string;
   userAgent?: string;
+  ip?: string;
 }) {
-  const e: ClickEvent = {
-    id: id(),
-    createdAt: new Date().toISOString(),
-    ...input,
-  };
-  store.clicks.unshift(e);
-  if (store.clicks.length > 5000) store.clicks.length = 5000;
-  return e;
+  repoLogClick(input);
 }
 
 export function addSubscriber(input: { email: string; source?: string }) {
   const email = input.email.trim().toLowerCase();
-  if (!store.subscribers.has(email)) {
-    store.subscribers.set(email, {
-      email,
-      source: input.source,
-      createdAt: new Date().toISOString(),
-    });
-  }
-  return store.subscribers.get(email)!;
+  addNewsletterSignup(email);
+  return { email, source: input.source, createdAt: new Date().toISOString() };
 }
 
-export function addInquiry(input: Omit<Inquiry, "id" | "createdAt">) {
-  const i: Inquiry = { id: id(), createdAt: new Date().toISOString(), ...input };
-  store.inquiries.unshift(i);
-  return i;
+export function addInquiry(input: {
+  name: string;
+  email: string;
+  subject: string;
+  message: string;
+}) {
+  addContactMessage(input);
+  return { ...input, id: "saved", createdAt: new Date().toISOString() };
 }
 
 export function getStats() {
   return {
-    clicks: store.clicks.length,
-    subscribers: store.subscribers.size,
-    inquiries: store.inquiries.length,
+    clicks: totalClicks(365),
+    subscribers: listNewsletterSignups().length,
+    inquiries: listContactMessages().length,
   };
 }

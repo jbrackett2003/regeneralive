@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { articles } from "@/data/articles";
+import { getAllArticles } from "@/data/articles";
 
 export const metadata = {
   title: "Journal · Long reads on living regeneratively",
@@ -14,6 +14,7 @@ export default async function JournalPage({
   searchParams: Promise<{ tag?: string }>;
 }) {
   const sp = await searchParams;
+  const articles = getAllArticles();
   let list = [...articles].sort((a, b) =>
     b.publishedAt.localeCompare(a.publishedAt)
   );

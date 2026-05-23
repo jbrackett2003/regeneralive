@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { articles, getArticleBySlug } from "@/data/articles";
+import { getAllArticles, getArticleBySlug } from "@/data/articles";
 import { getProductBySlug } from "@/data/products";
 import { ProductCard } from "@/components/product/product-card";
 import { Markdown } from "@/lib/markdown";
@@ -9,8 +9,10 @@ import { ChevronRight } from "lucide-react";
 import { SectionHeader } from "@/components/site/section";
 import type { Metadata } from "next";
 
+export const dynamic = "force-dynamic";
+
 export function generateStaticParams() {
-  return articles.map((a) => ({ slug: a.slug }));
+  return getAllArticles().map((a) => ({ slug: a.slug }));
 }
 
 export async function generateMetadata({

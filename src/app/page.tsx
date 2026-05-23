@@ -1,11 +1,11 @@
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, ArrowUpRight, Leaf, Sparkles } from "lucide-react";
-import { categories } from "@/data/categories";
+import { getAllCategories } from "@/data/categories";
 import {
   getEditorPicks,
   getFeatured,
-  products,
+  getAllProducts,
 } from "@/data/products";
 import { getLatestArticles } from "@/data/articles";
 import { ProductCard } from "@/components/product/product-card";
@@ -30,6 +30,8 @@ const goals = [
 ];
 
 export default function HomePage() {
+  const categories = getAllCategories();
+  const products = getAllProducts();
   const editorPicks = getEditorPicks(4);
   const featured = getFeatured(8);
   const latestArticles = getLatestArticles(3);

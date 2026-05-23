@@ -4,7 +4,7 @@ import { notFound } from "next/navigation";
 import {
   getProductBySlug,
   getRelatedProducts,
-  products,
+  getAllProducts,
 } from "@/data/products";
 import { getCategoryBySlug } from "@/data/categories";
 import { ProductCard } from "@/components/product/product-card";
@@ -13,8 +13,10 @@ import { ArrowUpRight, Check, Star, Info, ChevronRight } from "lucide-react";
 import { SectionHeader } from "@/components/site/section";
 import type { Metadata } from "next";
 
+export const dynamic = "force-dynamic";
+
 export function generateStaticParams() {
-  return products.map((p) => ({ slug: p.slug }));
+  return getAllProducts().map((p) => ({ slug: p.slug }));
 }
 
 export async function generateMetadata({

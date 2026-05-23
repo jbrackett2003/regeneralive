@@ -4,6 +4,7 @@ import "./globals.css";
 import { Header } from "@/components/site/header";
 import { Footer } from "@/components/site/footer";
 import { DisclosureBanner } from "@/components/site/disclosure-banner";
+import { PromoBanner } from "@/components/site/promo-banner";
 
 const fraunces = Fraunces({
   variable: "--font-fraunces",
@@ -41,19 +42,30 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
+  const { headers } = await import("next/headers");
+  const hdrs = await headers();
+  const pathname = hdrs.get("x-pathname") || "";
+  const isAdmin = pathname.startsWith("/admin");
   return (
     <html
       lang="en"
       className={`${fraunces.variable} ${interTight.variable} ${jetbrains.variable}`}
     >
       <body suppressHydrationWarning className="antialiased">
-        <DisclosureBanner />
-        <Header />
-        <main className="relative z-[2]">{children}</main>
-        <Footer />
+        {isAdmin ? (
+          children
+        ) : (
+          <>
+            <PromoBanner />
+            <DisclosureBanner />
+            <Header />
+            <main className="relative z-[2]">{children}</main>
+            <Footer />
+          </>
+        )}
       </body>
     </html>
   );

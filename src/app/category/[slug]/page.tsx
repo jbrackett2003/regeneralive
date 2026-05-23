@@ -1,12 +1,14 @@
 import Image from "next/image";
 import { notFound } from "next/navigation";
-import { categories, getCategoryBySlug } from "@/data/categories";
+import { getAllCategories, getCategoryBySlug } from "@/data/categories";
 import { getProductsByCategory } from "@/data/products";
 import { ProductCard } from "@/components/product/product-card";
 import type { Metadata } from "next";
 
+export const dynamic = "force-dynamic";
+
 export function generateStaticParams() {
-  return categories.map((c) => ({ slug: c.slug }));
+  return getAllCategories().map((c) => ({ slug: c.slug }));
 }
 
 export async function generateMetadata({

@@ -1,5 +1,5 @@
-import { products } from "@/data/products";
-import { categories } from "@/data/categories";
+import { getAllProducts } from "@/data/products";
+import { getAllCategories } from "@/data/categories";
 import { ProductCard } from "@/components/product/product-card";
 import { ShopFilters } from "@/components/product/shop-filters";
 
@@ -23,6 +23,8 @@ export default async function ShopPage({
   searchParams: Promise<SearchParams>;
 }) {
   const sp = await searchParams;
+  const products = getAllProducts();
+  const categories = getAllCategories();
 
   let filtered = [...products];
   if (sp.category)

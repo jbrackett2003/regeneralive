@@ -1,10 +1,11 @@
 import Link from "next/link";
 import { Logo } from "./logo";
 import { NewsletterForm } from "./newsletter-form";
-import { categories } from "@/data/categories";
+import { getAllCategories } from "@/data/categories";
 import { Instagram, Mail } from "lucide-react";
 
 export function Footer() {
+  const categories = getAllCategories();
   return (
     <footer className="relative z-[2] mt-32 bg-moss-deep text-bone">
       <div className="container-x py-20">
