@@ -5,7 +5,8 @@ import { categories as seedCategories } from "@/data/seed-categories";
 import { products as seedProducts } from "@/data/seed-products";
 import { articles as seedArticles } from "@/data/seed-articles";
 
-const DATA_DIR = path.join(process.cwd(), "data-store");
+const DATA_DIR =
+  process.env.DATA_DIR || path.join(process.cwd(), "data-store");
 if (!fs.existsSync(DATA_DIR)) fs.mkdirSync(DATA_DIR, { recursive: true });
 
 const DB_PATH = path.join(DATA_DIR, "regeneralive.db");

@@ -2,21 +2,16 @@ import { NextRequest, NextResponse } from "next/server";
 import path from "path";
 import fs from "fs";
 import crypto from "crypto";
+import { UPLOAD_DIR, ensureDataDirs } from "@/lib/storage";
 
 export const runtime = "nodejs";
-
-const UPLOAD_DIR = path.join(process.cwd(), "public", "uploads");
-
-function ensureDir() {
-  if (!fs.existsSync(UPLOAD_DIR)) fs.mkdirSync(UPLOAD_DIR, { recursive: true });
-}
 
 const MAX_BYTES = 8 * 1024 * 1024; // 8MB
 const ALLOWED_EXT = new Set([".jpg", ".jpeg", ".png", ".webp", ".gif", ".svg"]);
 
 export async function POST(req: NextRequest) {
   try {
-    ensureDir();
+    ensureDataDirs();
     const fd = await req.formData();
     const file = fd.get("file") as File | null;
     if (!file) {
