@@ -30,19 +30,15 @@ WORKDIR /app
 ENV NODE_ENV=production
 ENV NEXT_TELEMETRY_DISABLED=1
 
-# Non-root user
-RUN addgroup --system --gid 1001 nodejs && \
-    adduser --system --uid 1001 nextjs
-
 # Standalone server bundle (includes node_modules incl. compiled better-sqlite3)
-COPY --from=builder --chown=nextjs:nodejs /app/.next-build/standalone ./
-COPY --from=builder --chown=nextjs:nodejs /app/.next-build/static ./.next-build/static
+COPY --from=builder /app/.next-build/standalone ./
+COPY --from=builder /app/.next-build/static ./.next-build/static
 COPY --from=builder /app/public ./public
 
-# Create + own data dir (Railway volume will mount over this)
-RUN mkdir -p /app/data-store && chown -R nextjs:nodejs /app/data-store
-
-USER nextjs
+# Ensure data dir exists. Railway mounts a persistent volume here at runtime;
+# running as root is fine for this single-purpose container and lets us
+# write to the volume regardless of mount ownership.
+RUN mkdir -p /app/data-store
 
 EXPOSE 3000
 ENV PORT=3000
