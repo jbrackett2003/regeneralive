@@ -132,6 +132,62 @@ export function Markdown({ source }: { source: string }) {
       i++;
       continue;
     }
+    // GFM table — header row + separator + data rows. Looks like:
+    //   | col1 | col2 |
+    //   |------|------|
+    //   | a    | b    |
+    if (
+      line.startsWith("|") &&
+      i + 1 < lines.length &&
+      /^\s*\|?\s*:?-+:?\s*(\|\s*:?-+:?\s*)+\|?\s*$/.test(lines[i + 1])
+    ) {
+      const splitRow = (raw: string) =>
+        raw
+          .replace(/^\s*\|/, "")
+          .replace(/\|\s*$/, "")
+          .split("|")
+          .map((c) => c.trim());
+      const header = splitRow(line);
+      i += 2; // skip header + separator
+      const rows: string[][] = [];
+      while (i < lines.length && lines[i].startsWith("|")) {
+        rows.push(splitRow(lines[i]));
+        i++;
+      }
+      blocks.push(
+        <div key={key++} className="my-8 overflow-x-auto">
+          <table className="w-full border-collapse text-sm">
+            <thead>
+              <tr className="border-b-2 border-ink/20">
+                {header.map((h, idx) => (
+                  <th
+                    key={idx}
+                    className="py-3 pr-4 text-left font-serif font-semibold text-ink"
+                  >
+                    {renderInline(h)}
+                  </th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {rows.map((r, rIdx) => (
+                <tr key={rIdx} className="border-b border-ink/10">
+                  {r.map((c, cIdx) => (
+                    <td
+                      key={cIdx}
+                      className="py-3 pr-4 align-top text-ink/80"
+                    >
+                      {renderInline(c)}
+                    </td>
+                  ))}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      );
+      continue;
+    }
     // paragraph (group consecutive non-empty lines)
     const buf: string[] = [];
     while (
@@ -139,12 +195,15 @@ export function Markdown({ source }: { source: string }) {
       lines[i].trim() &&
       !lines[i].startsWith("#") &&
       !lines[i].startsWith("- ") &&
-      !lines[i].startsWith("> ")
+      !lines[i].startsWith("> ") &&
+      !lines[i].startsWith("|")
     ) {
       buf.push(lines[i]);
       i++;
     }
-    blocks.push(<p key={key++}>{renderInline(buf.join(" "))}</p>);
+    if (buf.length) {
+      blocks.push(<p key={key++}>{renderInline(buf.join(" "))}</p>);
+    }
   }
 
   return <div className="prose-editorial">{blocks}</div>;

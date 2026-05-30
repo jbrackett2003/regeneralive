@@ -16,12 +16,15 @@ import {
   getEditorPicks,
   getFeatured,
   getAllProducts,
+  getActiveDeals,
 } from "@/data/products";
 import { getLatestArticles } from "@/data/articles";
 import { ProductCard } from "@/components/product/product-card";
 import { SectionHeader } from "@/components/site/section";
 import { NewsletterForm } from "@/components/site/newsletter-form";
 import { ScrollReveal } from "@/components/site/scroll-reveal";
+import { LiveDeals } from "@/components/home/live-deals";
+import { BrandCluster } from "@/components/home/brand-cluster";
 
 const trustMarks = [
   { label: "USDA Organic", Icon: Leaf },
@@ -72,8 +75,8 @@ const goals = [
 ];
 
 const stats = [
-  { value: "36+", label: "Products vetted" },
-  { value: "200h", label: "Of independent research" },
+  { value: "150+", label: "Products vetted" },
+  { value: "300h", label: "Of independent research" },
   { value: "8,400", label: "Readers in the dispatch" },
   { value: "0", label: "Paid placements" },
 ];
@@ -84,6 +87,7 @@ export default function HomePage() {
   const editorPicks = getEditorPicks(4);
   const featured = getFeatured(8);
   const latestArticles = getLatestArticles(3);
+  const activeDeals = getActiveDeals(8);
 
   return (
     <>
@@ -266,6 +270,9 @@ export default function HomePage() {
         </div>
       </ScrollReveal>
 
+      {/* ─────────────────────────── LIVE DEALS ─────────────────────────── */}
+      <LiveDeals deals={activeDeals} />
+
       {/* ─────────────────────────── BY THE NUMBERS ─────────────────────────── */}
       <section className="relative overflow-hidden border-y border-ink/10 bg-bone-2/30">
         <div
@@ -356,6 +363,9 @@ export default function HomePage() {
           </div>
         </div>
       </ScrollReveal>
+
+      {/* ─────────────────────────── BRANDS WE STAND BEHIND ─────────────────────────── */}
+      <BrandCluster />
 
       {/* ─────────────────────────── MANIFESTO ─────────────────────────── */}
       <ScrollReveal as="section" className="py-24 md:py-32">

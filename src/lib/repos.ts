@@ -30,6 +30,7 @@ type ProductRow = {
   deal_label: string | null;
   deal_starts_at: string | null;
   deal_ends_at: string | null;
+  original_price: number | null;
 };
 
 type ArticleRow = {
@@ -93,6 +94,7 @@ function mapProduct(r: ProductRow): Product & {
     dealLabel: r.deal_label,
     dealStartsAt: r.deal_starts_at,
     dealEndsAt: r.deal_ends_at,
+    originalPrice: r.original_price,
   };
 }
 
@@ -170,6 +172,38 @@ export function getFeatured(limit = 8) {
     .slice(0, limit);
 }
 
+/**
+ * Products with an active deal label, where current time is within
+ * dealStartsAt..dealEndsAt (either bound is optional).
+ */
+export function getActiveDeals(limit?: number) {
+  const now = Date.now();
+  const all = listProducts()
+    .filter((p) => {
+      if (!p.dealLabel) return false;
+      if (p.dealStartsAt && new Date(p.dealStartsAt).getTime() > now) return false;
+      if (p.dealEndsAt && new Date(p.dealEndsAt).getTime() < now) return false;
+      return true;
+    })
+    // Editor's picks first, then highest savings %, then rating
+    .sort((a, b) => {
+      const aPick = a.isEditorPick ? 1 : 0;
+      const bPick = b.isEditorPick ? 1 : 0;
+      if (aPick !== bPick) return bPick - aPick;
+      const aSav =
+        a.originalPrice && a.originalPrice > a.price
+          ? (a.originalPrice - a.price) / a.originalPrice
+          : 0;
+      const bSav =
+        b.originalPrice && b.originalPrice > b.price
+          ? (b.originalPrice - b.price) / b.originalPrice
+          : 0;
+      if (aSav !== bSav) return bSav - aSav;
+      return b.rating - a.rating;
+    });
+  return typeof limit === "number" ? all.slice(0, limit) : all;
+}
+
 export function getRelatedProducts(slug: string, limit = 4) {
   const p = getProductBySlug(slug);
   if (!p) return [];
@@ -205,6 +239,7 @@ export type ProductInput = {
   dealLabel?: string | null;
   dealStartsAt?: string | null;
   dealEndsAt?: string | null;
+  originalPrice?: number | null;
 };
 
 export function createProduct(input: ProductInput) {
@@ -215,12 +250,14 @@ export function createProduct(input: ProductInput) {
       id, slug, name, brand, tagline, description, price, currency,
       image_url, gallery_urls, category_slug, affiliate_url, merchant,
       certifications, goals, rating, is_editor_pick, is_featured, is_hidden,
-      pros, cons, ingredients, serving_size, deal_label, deal_starts_at, deal_ends_at
+      pros, cons, ingredients, serving_size,
+      deal_label, deal_starts_at, deal_ends_at, original_price
     ) VALUES (
       @id, @slug, @name, @brand, @tagline, @description, @price, @currency,
       @image_url, @gallery_urls, @category_slug, @affiliate_url, @merchant,
       @certifications, @goals, @rating, @is_editor_pick, @is_featured, @is_hidden,
-      @pros, @cons, @ingredients, @serving_size, @deal_label, @deal_starts_at, @deal_ends_at
+      @pros, @cons, @ingredients, @serving_size,
+      @deal_label, @deal_starts_at, @deal_ends_at, @original_price
     )`
   ).run({
     id,
@@ -249,6 +286,7 @@ export function createProduct(input: ProductInput) {
     deal_label: input.dealLabel ?? null,
     deal_starts_at: input.dealStartsAt ?? null,
     deal_ends_at: input.dealEndsAt ?? null,
+    original_price: input.originalPrice ?? null,
   });
   return id;
 }
@@ -269,6 +307,7 @@ export function updateProduct(id: string, input: Partial<ProductInput>) {
       is_hidden = @is_hidden, pros = @pros, cons = @cons,
       ingredients = @ingredients, serving_size = @serving_size,
       deal_label = @deal_label, deal_starts_at = @deal_starts_at, deal_ends_at = @deal_ends_at,
+      original_price = @original_price,
       updated_at = CURRENT_TIMESTAMP
     WHERE id = @id`
   ).run({
@@ -298,6 +337,7 @@ export function updateProduct(id: string, input: Partial<ProductInput>) {
     deal_label: merged.dealLabel ?? null,
     deal_starts_at: merged.dealStartsAt ?? null,
     deal_ends_at: merged.dealEndsAt ?? null,
+    original_price: merged.originalPrice ?? null,
   });
 }
 

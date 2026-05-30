@@ -7,6 +7,7 @@ import {
   getEditorPicks as repoEditor,
   getFeatured as repoFeatured,
   getRelatedProducts as repoRelated,
+  getActiveDeals as repoDeals,
 } from "@/lib/repos";
 
 // Backwards-compatible: callers used `products` array directly.
@@ -26,3 +27,4 @@ export const getProductsByCategory = repoByCat;
 export const getEditorPicks = repoEditor;
 export const getFeatured = repoFeatured;
 export const getRelatedProducts = repoRelated;
+export const getActiveDeals = repoDeals;
