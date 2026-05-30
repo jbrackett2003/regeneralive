@@ -42,6 +42,19 @@ async function isValid(token: string | undefined, secret: string): Promise<boole
 export async function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
 
+  // --- Canonical host: redirect apex regeneralive.com -> www.regeneralive.com ---
+  // This fires only when traffic actually reaches Railway (i.e., DNS for the
+  // apex points at us). Until then, Squarespace serves a parking page on its
+  // own infra; this redirect is a safety net for once DNS is moved.
+  const host = req.headers.get("host")?.toLowerCase() ?? "";
+  if (host === "regeneralive.com") {
+    const url = new URL(req.url);
+    url.protocol = "https:";
+    url.hostname = "www.regeneralive.com";
+    url.port = "";
+    return NextResponse.redirect(url, 308);
+  }
+
   // Always inject pathname header so server components can detect /admin
   const reqHeaders = new Headers(req.headers);
   reqHeaders.set("x-pathname", pathname);
