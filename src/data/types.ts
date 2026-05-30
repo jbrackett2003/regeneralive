@@ -55,6 +55,12 @@ export interface Product {
   cons: string[];
   ingredients?: string;
   servingSize?: string;
+  /** Optional deal/promo data — when active, surfaces a badge on cards */
+  dealLabel?: string | null;
+  dealStartsAt?: string | null;
+  dealEndsAt?: string | null;
+  /** Optional original price (used when on a deal to show savings) */
+  originalPrice?: number | null;
 }
 
 export interface Article {

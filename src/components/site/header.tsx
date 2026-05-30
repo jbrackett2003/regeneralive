@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Menu, X } from "lucide-react";
 import { Logo } from "./logo";
@@ -14,6 +15,7 @@ const nav = [
 export function Header() {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
+  const pathname = usePathname() || "/";
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 12);
@@ -21,6 +23,14 @@ export function Header() {
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
+
+  // Close mobile menu on route change
+  useEffect(() => {
+    setOpen(false);
+  }, [pathname]);
+
+  const isActive = (href: string) =>
+    href === "/" ? pathname === "/" : pathname.startsWith(href);
 
   return (
     <header
@@ -34,15 +44,25 @@ export function Header() {
         <Logo />
 
         <nav className="hidden items-center gap-10 md:flex">
-          {nav.map((n) => (
-            <Link
-              key={n.href}
-              href={n.href}
-              className="link-underline text-sm font-medium text-ink/80 transition-colors hover:text-ink"
-            >
-              {n.label}
-            </Link>
-          ))}
+          {nav.map((n) => {
+            const active = isActive(n.href);
+            return (
+              <Link
+                key={n.href}
+                href={n.href}
+                className={`relative text-sm font-medium transition-colors ${
+                  active ? "text-ink" : "text-ink/65 hover:text-ink"
+                }`}
+              >
+                {n.label}
+                <span
+                  className={`absolute -bottom-1 left-0 h-px w-full origin-left bg-moss transition-transform duration-500 ${
+                    active ? "scale-x-100" : "scale-x-0"
+                  }`}
+                />
+              </Link>
+            );
+          })}
         </nav>
 
         <div className="hidden md:flex">
@@ -76,16 +96,24 @@ export function Header() {
             </button>
           </div>
           <nav className="container-x flex flex-col gap-2 pt-8">
-            {nav.map((n) => (
-              <Link
-                key={n.href}
-                href={n.href}
-                onClick={() => setOpen(false)}
-                className="border-b border-ink/10 py-5 font-serif text-3xl text-ink"
-              >
-                {n.label}
-              </Link>
-            ))}
+            {nav.map((n) => {
+              const active = isActive(n.href);
+              return (
+                <Link
+                  key={n.href}
+                  href={n.href}
+                  onClick={() => setOpen(false)}
+                  className={`flex items-center justify-between border-b border-ink/10 py-5 font-serif text-3xl ${
+                    active ? "text-moss italic" : "text-ink"
+                  }`}
+                >
+                  {n.label}
+                  {active && (
+                    <span className="text-base text-moss/60">·</span>
+                  )}
+                </Link>
+              );
+            })}
             <Link
               href="/#newsletter"
               onClick={() => setOpen(false)}

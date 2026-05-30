@@ -1,6 +1,16 @@
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight, ArrowUpRight, Leaf, Sparkles } from "lucide-react";
+import {
+  ArrowRight,
+  ArrowUpRight,
+  Leaf,
+  Sparkles,
+  ShieldCheck,
+  Award,
+  TestTube2,
+  Sprout,
+  Sun as SunIcon,
+} from "lucide-react";
 import { getAllCategories } from "@/data/categories";
 import {
   getEditorPicks,
@@ -11,22 +21,61 @@ import { getLatestArticles } from "@/data/articles";
 import { ProductCard } from "@/components/product/product-card";
 import { SectionHeader } from "@/components/site/section";
 import { NewsletterForm } from "@/components/site/newsletter-form";
+import { ScrollReveal } from "@/components/site/scroll-reveal";
 
 const trustMarks = [
-  "USDA Organic",
-  "Regenerative Certified",
-  "Glyphosate-Free",
-  "Third-Party Tested",
-  "Grass-Fed & Pastured",
+  { label: "USDA Organic", Icon: Leaf },
+  { label: "Regenerative Certified", Icon: Sprout },
+  { label: "Glyphosate-Free", Icon: ShieldCheck },
+  { label: "Third-Party Tested", Icon: TestTube2 },
+  { label: "Grass-Fed & Pastured", Icon: SunIcon },
+  { label: "B-Corp Verified", Icon: Award },
 ];
 
 const goals = [
-  { slug: "sleep", label: "Sleep deeper", emoji: "🌙" },
-  { slug: "performance", label: "Move stronger", emoji: "⚡" },
-  { slug: "gut", label: "Heal your gut", emoji: "🌱" },
-  { slug: "longevity", label: "Live longer", emoji: "🌳" },
-  { slug: "focus", label: "Focus sharper", emoji: "✶" },
-  { slug: "skin", label: "Glow naturally", emoji: "✿" },
+  {
+    slug: "sleep",
+    label: "Sleep deeper",
+    emoji: "🌙",
+    tint: "from-moss/10 via-bone to-bone",
+  },
+  {
+    slug: "performance",
+    label: "Move stronger",
+    emoji: "⚡",
+    tint: "from-sun/15 via-bone to-bone",
+  },
+  {
+    slug: "gut",
+    label: "Heal your gut",
+    emoji: "🌱",
+    tint: "from-lichen/20 via-bone to-bone",
+  },
+  {
+    slug: "longevity",
+    label: "Live longer",
+    emoji: "🌳",
+    tint: "from-moss/15 via-bone to-bone",
+  },
+  {
+    slug: "focus",
+    label: "Focus sharper",
+    emoji: "✶",
+    tint: "from-clay/10 via-bone to-bone",
+  },
+  {
+    slug: "skin",
+    label: "Glow naturally",
+    emoji: "✿",
+    tint: "from-sun/15 via-bone to-bone",
+  },
+];
+
+const stats = [
+  { value: "36+", label: "Products vetted" },
+  { value: "200h", label: "Of independent research" },
+  { value: "8,400", label: "Readers in the dispatch" },
+  { value: "0", label: "Paid placements" },
 ];
 
 export default function HomePage() {
@@ -108,7 +157,7 @@ export default function HomePage() {
             {/* hero image collage */}
             <div className="reveal reveal-3 relative lg:col-span-5">
               <div className="grid grid-cols-5 grid-rows-6 gap-3 md:gap-4">
-                <div className="col-span-3 row-span-4 relative overflow-hidden rounded-2xl">
+                <div className="col-span-3 row-span-4 relative overflow-hidden rounded-2xl ring-1 ring-ink/5 shadow-xl shadow-ink/5">
                   <Image
                     src="https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=1400&q=80"
                     alt="Open field at golden hour"
@@ -118,7 +167,7 @@ export default function HomePage() {
                     priority
                   />
                 </div>
-                <div className="col-span-2 row-span-3 col-start-4 relative overflow-hidden rounded-2xl">
+                <div className="col-span-2 row-span-3 col-start-4 relative overflow-hidden rounded-2xl ring-1 ring-ink/5">
                   <Image
                     src="https://images.unsplash.com/photo-1488459716781-31db52582fe9?auto=format&fit=crop&w=1000&q=80"
                     alt="Fresh produce on linen"
@@ -127,7 +176,7 @@ export default function HomePage() {
                     className="object-cover"
                   />
                 </div>
-                <div className="col-span-2 row-span-3 col-start-4 relative overflow-hidden rounded-2xl">
+                <div className="col-span-2 row-span-3 col-start-4 relative overflow-hidden rounded-2xl ring-1 ring-ink/5">
                   <Image
                     src="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&w=1000&q=80"
                     alt="Hand pouring coffee"
@@ -136,7 +185,7 @@ export default function HomePage() {
                     className="object-cover"
                   />
                 </div>
-                <div className="col-span-3 row-span-2 col-start-1 row-start-5 relative overflow-hidden rounded-2xl">
+                <div className="col-span-3 row-span-2 col-start-1 row-start-5 relative overflow-hidden rounded-2xl ring-1 ring-ink/5">
                   <Image
                     src="https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&w=1200&q=80"
                     alt="Hand in soil"
@@ -166,15 +215,16 @@ export default function HomePage() {
       </section>
 
       {/* ─────────────────────────── TRUST BAR ─────────────────────────── */}
-      <section className="border-y border-ink/10 bg-bone-2/40">
-        <div className="container-x py-5">
-          <div className="flex flex-wrap items-center justify-center gap-x-8 gap-y-2 md:justify-between">
-            {trustMarks.map((m) => (
+      <section className="border-y border-ink/10 bg-bone-2/40 backdrop-blur-sm">
+        <div className="container-x py-6">
+          <div className="flex flex-wrap items-center justify-center gap-x-8 gap-y-3 md:justify-between">
+            {trustMarks.map(({ label, Icon }) => (
               <span
-                key={m}
-                className="label-mono text-ink/50"
+                key={label}
+                className="group inline-flex items-center gap-2 text-ink/55 transition-colors hover:text-moss"
               >
-                {m}
+                <Icon className="h-3.5 w-3.5 text-moss/70 transition-transform duration-500 group-hover:rotate-[8deg]" />
+                <span className="label-mono">{label}</span>
               </span>
             ))}
           </div>
@@ -182,7 +232,7 @@ export default function HomePage() {
       </section>
 
       {/* ─────────────────────────── EDITOR'S PICKS ─────────────────────────── */}
-      <section className="py-24 md:py-32">
+      <ScrollReveal as="section" className="py-24 md:py-32">
         <div className="container-x">
           <SectionHeader
             eyebrow="The shortlist"
@@ -197,15 +247,43 @@ export default function HomePage() {
             ctaLabel="Browse the full shop"
           />
           <div className="mt-14 grid gap-x-6 gap-y-12 sm:grid-cols-2 lg:grid-cols-4">
-            {editorPicks.map((p) => (
-              <ProductCard key={p.id} product={p} />
+            {editorPicks.map((p, i) => (
+              <ScrollReveal key={p.id} delay={i * 70} y={20}>
+                <ProductCard product={p} />
+              </ScrollReveal>
+            ))}
+          </div>
+        </div>
+      </ScrollReveal>
+
+      {/* ─────────────────────────── BY THE NUMBERS ─────────────────────────── */}
+      <section className="relative overflow-hidden border-y border-ink/10 bg-bone-2/30">
+        <div
+          className="pointer-events-none absolute inset-0 opacity-[0.04]"
+          style={{
+            backgroundImage:
+              "linear-gradient(to right, hsl(var(--ink)) 1px, transparent 1px)",
+            backgroundSize: "120px 100%",
+          }}
+        />
+        <div className="container-x relative py-14 md:py-16">
+          <div className="grid grid-cols-2 gap-8 md:grid-cols-4 md:gap-4">
+            {stats.map((s, i) => (
+              <ScrollReveal key={s.label} delay={i * 80}>
+                <div className="text-center md:text-left">
+                  <p className="font-serif text-5xl leading-none text-ink md:text-6xl">
+                    {s.value}
+                  </p>
+                  <p className="label-mono mt-3 text-ink/50">{s.label}</p>
+                </div>
+              </ScrollReveal>
             ))}
           </div>
         </div>
       </section>
 
       {/* ─────────────────────────── CATEGORIES ─────────────────────────── */}
-      <section className="py-24 md:py-32">
+      <ScrollReveal as="section" className="py-24 md:py-32">
         <div className="container-x">
           <SectionHeader
             eyebrow="Browse by category"
@@ -230,44 +308,47 @@ export default function HomePage() {
                 "md:col-span-5 md:row-span-1",
               ];
               return (
-                <Link
+                <ScrollReveal
                   key={cat.id}
-                  href={`/category/${cat.slug}`}
-                  className={`group relative overflow-hidden rounded-2xl ${
-                    layout[i]
-                  } aspect-[4/3] md:aspect-auto`}
+                  delay={(i % 4) * 70}
+                  className={`${layout[i]}`}
                 >
-                  <Image
-                    src={cat.imageUrl}
-                    alt={cat.name}
-                    fill
-                    sizes="(min-width: 768px) 50vw, 100vw"
-                    className="object-cover transition-transform duration-700 group-hover:scale-105"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-ink/85 via-ink/30 to-transparent" />
-                  <div className="absolute inset-0 flex flex-col justify-end p-6 md:p-8">
-                    <p className="label-mono mb-2 text-bone/60">
-                      {String(cat.order).padStart(2, "0")} · {cat.emoji}
-                    </p>
-                    <h3 className="font-serif text-2xl text-bone md:text-3xl">
-                      {cat.name}
-                    </h3>
-                    <p className="mt-1.5 max-w-md text-sm text-bone/75">
-                      {cat.tagline}
-                    </p>
-                    <span className="mt-4 inline-flex w-fit items-center gap-1.5 text-xs font-medium text-bone opacity-0 transition-opacity duration-300 group-hover:opacity-100">
-                      Explore <ArrowUpRight className="h-3.5 w-3.5" />
-                    </span>
-                  </div>
-                </Link>
+                  <Link
+                    href={`/category/${cat.slug}`}
+                    className="group relative block h-full w-full overflow-hidden rounded-2xl aspect-[4/3] md:aspect-auto"
+                  >
+                    <Image
+                      src={cat.imageUrl}
+                      alt={cat.name}
+                      fill
+                      sizes="(min-width: 768px) 50vw, 100vw"
+                      className="object-cover transition-transform duration-700 group-hover:scale-105"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-ink/85 via-ink/30 to-transparent" />
+                    <div className="absolute inset-0 flex flex-col justify-end p-6 md:p-8">
+                      <p className="label-mono mb-2 text-bone/60">
+                        {String(cat.order).padStart(2, "0")} · {cat.emoji}
+                      </p>
+                      <h3 className="font-serif text-2xl text-bone md:text-3xl">
+                        {cat.name}
+                      </h3>
+                      <p className="mt-1.5 max-w-md text-sm text-bone/75">
+                        {cat.tagline}
+                      </p>
+                      <span className="mt-4 inline-flex w-fit items-center gap-1.5 text-xs font-medium text-bone opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+                        Explore <ArrowUpRight className="h-3.5 w-3.5" />
+                      </span>
+                    </div>
+                  </Link>
+                </ScrollReveal>
               );
             })}
           </div>
         </div>
-      </section>
+      </ScrollReveal>
 
       {/* ─────────────────────────── MANIFESTO ─────────────────────────── */}
-      <section className="py-24 md:py-32">
+      <ScrollReveal as="section" className="py-24 md:py-32">
         <div className="container-x">
           <div className="grid items-center gap-10 lg:grid-cols-12 lg:gap-16">
             <div className="lg:col-span-7">
@@ -308,7 +389,7 @@ export default function HomePage() {
               </Link>
             </div>
             <div className="relative lg:col-span-5">
-              <div className="relative aspect-[4/5] overflow-hidden rounded-2xl">
+              <div className="relative aspect-[4/5] overflow-hidden rounded-2xl ring-1 ring-ink/10 shadow-2xl shadow-ink/10">
                 <Image
                   src="https://images.unsplash.com/photo-1464226184884-fa280b87c399?auto=format&fit=crop&w=1200&q=80"
                   alt="Farmer hands"
@@ -316,6 +397,7 @@ export default function HomePage() {
                   sizes="(min-width: 1024px) 35vw, 80vw"
                   className="object-cover"
                 />
+                <div className="absolute inset-0 bg-gradient-to-t from-ink/30 via-transparent to-transparent" />
               </div>
               <div className="absolute -right-4 top-8 hidden max-w-[220px] rounded-xl bg-bone p-5 shadow-xl ring-1 ring-ink/5 md:block">
                 <p className="font-serif text-lg italic leading-snug text-ink">
@@ -327,10 +409,10 @@ export default function HomePage() {
             </div>
           </div>
         </div>
-      </section>
+      </ScrollReveal>
 
       {/* ─────────────────────────── BY GOAL ─────────────────────────── */}
-      <section className="bg-bone-2/40 py-24">
+      <ScrollReveal as="section" className="bg-bone-2/40 py-24">
         <div className="container-x">
           <SectionHeader
             eyebrow="Shop by goal"
@@ -342,24 +424,30 @@ export default function HomePage() {
             description="Tell us what you're working on. We'll show you what we'd reach for first."
           />
           <div className="mt-12 grid grid-cols-2 gap-3 md:grid-cols-3 lg:grid-cols-6">
-            {goals.map((g) => (
-              <Link
-                key={g.slug}
-                href={`/shop?goal=${g.slug}`}
-                className="group flex flex-col items-center justify-center gap-3 rounded-xl border border-ink/10 bg-bone p-6 text-center transition-all hover:border-moss hover:shadow-lg hover:shadow-moss/10"
-              >
-                <span className="text-3xl transition-transform duration-300 group-hover:-translate-y-1">
-                  {g.emoji}
-                </span>
-                <span className="font-serif text-base text-ink">{g.label}</span>
-              </Link>
+            {goals.map((g, i) => (
+              <ScrollReveal key={g.slug} delay={i * 60}>
+                <Link
+                  href={`/shop?goal=${g.slug}`}
+                  className={`group relative flex h-full flex-col items-center justify-center gap-3 overflow-hidden rounded-2xl border border-ink/10 bg-gradient-to-br ${g.tint} p-6 text-center transition-all duration-500 hover:-translate-y-1 hover:border-moss/40 hover:shadow-xl hover:shadow-moss/10`}
+                >
+                  <span className="relative z-10 grid h-14 w-14 place-items-center rounded-full bg-bone shadow-md ring-1 ring-ink/5 text-3xl transition-transform duration-500 group-hover:rotate-[8deg] group-hover:scale-110">
+                    {g.emoji}
+                  </span>
+                  <span className="relative z-10 font-serif text-base text-ink">
+                    {g.label}
+                  </span>
+                  <span className="relative z-10 inline-flex items-center gap-1 text-[10px] uppercase tracking-[0.18em] text-ink/40 opacity-0 transition-opacity duration-500 group-hover:opacity-100">
+                    Explore <ArrowUpRight className="h-3 w-3" />
+                  </span>
+                </Link>
+              </ScrollReveal>
             ))}
           </div>
         </div>
-      </section>
+      </ScrollReveal>
 
       {/* ─────────────────────────── FROM THE JOURNAL ─────────────────────────── */}
-      <section className="py-24 md:py-32">
+      <ScrollReveal as="section" className="py-24 md:py-32">
         <div className="container-x">
           <SectionHeader
             eyebrow="From the journal"
@@ -378,7 +466,7 @@ export default function HomePage() {
                 href={`/journal/${latestArticles[0].slug}`}
                 className="group lg:row-span-2"
               >
-                <div className="relative aspect-[4/5] w-full overflow-hidden rounded-2xl">
+                <div className="relative aspect-[4/5] w-full overflow-hidden rounded-2xl ring-1 ring-ink/5">
                   <Image
                     src={latestArticles[0].coverImage}
                     alt={latestArticles[0].title}
@@ -405,7 +493,7 @@ export default function HomePage() {
                   href={`/journal/${a.slug}`}
                   className="group grid grid-cols-5 gap-5"
                 >
-                  <div className="col-span-2 relative aspect-[4/5] overflow-hidden rounded-xl">
+                  <div className="col-span-2 relative aspect-[4/5] overflow-hidden rounded-xl ring-1 ring-ink/5">
                     <Image
                       src={a.coverImage}
                       alt={a.title}
@@ -430,10 +518,10 @@ export default function HomePage() {
             </div>
           </div>
         </div>
-      </section>
+      </ScrollReveal>
 
       {/* ─────────────────────────── MORE PRODUCTS ─────────────────────────── */}
-      <section className="py-24">
+      <ScrollReveal as="section" className="py-24">
         <div className="container-x">
           <SectionHeader
             eyebrow="Reader favorites"
@@ -443,18 +531,20 @@ export default function HomePage() {
               </>
             }
             ctaHref="/shop"
-            ctaLabel="See all 24 products"
+            ctaLabel={`See all ${products.length} products`}
           />
           <div className="mt-14 grid gap-x-6 gap-y-12 sm:grid-cols-2 lg:grid-cols-4">
-            {featured.slice(0, 8).map((p) => (
-              <ProductCard key={p.id} product={p} />
+            {featured.slice(0, 8).map((p, i) => (
+              <ScrollReveal key={p.id} delay={(i % 4) * 70}>
+                <ProductCard product={p} />
+              </ScrollReveal>
             ))}
           </div>
         </div>
-      </section>
+      </ScrollReveal>
 
       {/* ─────────────────────────── INLINE NEWSLETTER (mid-page) ─────────────────────────── */}
-      <section className="relative overflow-hidden py-24">
+      <ScrollReveal as="section" className="relative overflow-hidden py-24">
         <div className="container-x">
           <div className="relative overflow-hidden rounded-3xl bg-moss px-8 py-16 text-bone md:px-16 md:py-20">
             <div className="pointer-events-none absolute inset-0">
@@ -480,7 +570,7 @@ export default function HomePage() {
             </div>
           </div>
         </div>
-      </section>
+      </ScrollReveal>
     </>
   );
 }
