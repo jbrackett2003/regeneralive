@@ -5,6 +5,8 @@ import { categories as seedCategories } from "@/data/seed-categories";
 import { products as seedProducts } from "@/data/seed-products";
 import { articles as seedArticles } from "@/data/seed-articles";
 import { thorneExtras } from "@/data/seed-thorne-extras";
+import { thorneExtras2 } from "@/data/seed-thorne-extras-2";
+import { regenFoods } from "@/data/seed-regen-foods";
 
 const DATA_DIR =
   process.env.DATA_DIR || path.join(process.cwd(), "data-store");
@@ -251,9 +253,12 @@ function seedExtras(db: Database.Database) {
     )
   `);
 
+  // All products that get the additive idempotent seed treatment
+  const allExtras = [...thorneExtras, ...thorneExtras2, ...regenFoods];
+
   let added = 0;
   const tx = db.transaction(() => {
-    for (const p of thorneExtras) {
+    for (const p of allExtras) {
       const result = insert.run({
         ...p,
         galleryUrls: JSON.stringify(p.galleryUrls || []),
@@ -271,6 +276,8 @@ function seedExtras(db: Database.Database) {
   });
   tx();
   if (added > 0) {
-    console.log(`[db] Added ${added} extra Thorne product(s) via idempotent seed`);
+    console.log(
+      `[db] Added ${added} product(s) via idempotent seed (Thorne + regenerative foods)`
+    );
   }
 }
