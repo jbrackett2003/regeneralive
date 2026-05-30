@@ -154,60 +154,70 @@ export default function HomePage() {
               </div>
             </div>
 
-            {/* hero image collage */}
+            {/* hero image collage — staggered 2-column with explicit aspect ratios */}
             <div className="reveal reveal-3 relative lg:col-span-5">
-              <div className="grid grid-cols-5 grid-rows-6 gap-3 md:gap-4">
-                <div className="col-span-3 row-span-4 relative overflow-hidden rounded-2xl ring-1 ring-ink/5 shadow-xl shadow-ink/5">
+              <div className="grid grid-cols-2 gap-3 md:gap-4">
+                {/* Left column — one tall hero image */}
+                <div className="relative aspect-[3/4] overflow-hidden rounded-2xl ring-1 ring-ink/5 shadow-xl shadow-ink/5">
                   <Image
                     src="https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=1400&q=80"
                     alt="Open field at golden hour"
                     fill
-                    sizes="(min-width: 1024px) 35vw, 60vw"
+                    sizes="(min-width: 1024px) 18vw, 45vw"
                     className="object-cover"
                     priority
                   />
                 </div>
-                <div className="col-span-2 row-span-3 col-start-4 relative overflow-hidden rounded-2xl ring-1 ring-ink/5">
-                  <Image
-                    src="https://images.unsplash.com/photo-1488459716781-31db52582fe9?auto=format&fit=crop&w=1000&q=80"
-                    alt="Fresh produce on linen"
-                    fill
-                    sizes="(min-width: 1024px) 25vw, 40vw"
-                    className="object-cover"
-                  />
-                </div>
-                <div className="col-span-2 row-span-3 col-start-4 relative overflow-hidden rounded-2xl ring-1 ring-ink/5">
-                  <Image
-                    src="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&w=1000&q=80"
-                    alt="Hand pouring coffee"
-                    fill
-                    sizes="(min-width: 1024px) 25vw, 40vw"
-                    className="object-cover"
-                  />
-                </div>
-                <div className="col-span-3 row-span-2 col-start-1 row-start-5 relative overflow-hidden rounded-2xl ring-1 ring-ink/5">
-                  <Image
-                    src="https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&w=1200&q=80"
-                    alt="Hand in soil"
-                    fill
-                    sizes="(min-width: 1024px) 35vw, 60vw"
-                    className="object-cover"
-                  />
+
+                {/* Right column — two stacked, offset down */}
+                <div className="flex flex-col gap-3 pt-10 md:gap-4 md:pt-14">
+                  <div className="relative aspect-square overflow-hidden rounded-2xl ring-1 ring-ink/5">
+                    <Image
+                      src="https://images.unsplash.com/photo-1488459716781-31db52582fe9?auto=format&fit=crop&w=1000&q=80"
+                      alt="Fresh produce on linen"
+                      fill
+                      sizes="(min-width: 1024px) 18vw, 45vw"
+                      className="object-cover"
+                    />
+                  </div>
+                  <div className="relative aspect-[4/5] overflow-hidden rounded-2xl ring-1 ring-ink/5">
+                    <Image
+                      src="https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&w=1000&q=80"
+                      alt="Hand in soil"
+                      fill
+                      sizes="(min-width: 1024px) 18vw, 45vw"
+                      className="object-cover"
+                    />
+                  </div>
                 </div>
               </div>
 
               {/* floating badge */}
-              <div className="float absolute -bottom-4 -left-4 hidden max-w-[200px] rounded-xl bg-bone p-4 shadow-xl ring-1 ring-ink/5 md:block">
-                <div className="flex items-center gap-2">
-                  <span className="grid h-8 w-8 place-items-center rounded-full bg-moss/10 text-moss">
+              <div className="float absolute -bottom-4 -left-4 hidden max-w-[210px] rounded-xl bg-bone p-4 shadow-xl ring-1 ring-ink/5 md:block">
+                <div className="flex items-center gap-2.5">
+                  <span className="grid h-9 w-9 place-items-center rounded-full bg-moss/10 text-moss">
                     <Sparkles className="h-4 w-4" />
                   </span>
                   <p className="font-serif text-sm leading-tight text-ink">
-                    24 picks
+                    Honest picks
                     <br />
                     <span className="italic text-moss">we'd give to family</span>
                   </p>
                 </div>
+              </div>
+
+              {/* small floating coffee chip top-left for atmosphere */}
+              <div
+                className="float absolute -top-3 right-6 hidden h-20 w-20 overflow-hidden rounded-full ring-4 ring-bone shadow-lg md:block"
+                style={{ animationDelay: "1.5s" }}
+              >
+                <Image
+                  src="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&w=400&q=80"
+                  alt="Hand pouring coffee"
+                  fill
+                  sizes="80px"
+                  className="object-cover"
+                />
               </div>
             </div>
           </div>

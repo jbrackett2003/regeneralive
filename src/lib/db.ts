@@ -4,6 +4,7 @@ import fs from "fs";
 import { categories as seedCategories } from "@/data/seed-categories";
 import { products as seedProducts } from "@/data/seed-products";
 import { articles as seedArticles } from "@/data/seed-articles";
+import { thorneExtras } from "@/data/seed-thorne-extras";
 
 const DATA_DIR =
   process.env.DATA_DIR || path.join(process.cwd(), "data-store");
@@ -141,6 +142,11 @@ function initSchema(db: Database.Database) {
     seedFromTsData(db);
   }
 
+  // Idempotent extras seed — runs every boot, but uses INSERT OR IGNORE so
+  // existing slugs are NOT overwritten. New products defined in code get
+  // added on next deploy without disturbing user-edited content.
+  seedExtras(db);
+
   // Seed initial admin password hash if no setting exists yet.
   // (Bcrypt hash is one-way — safe to include in source.
   // User can change password via /admin/settings.)
@@ -224,4 +230,47 @@ function seedFromTsData(db: Database.Database) {
   console.log(
     `[db] Seeded ${categories.length} categories, ${products.length} products, ${articles.length} articles`
   );
+}
+
+/**
+ * Idempotent additive seed — only inserts products whose slug doesn't already
+ * exist. Safe to run on every boot; existing edits are preserved.
+ */
+function seedExtras(db: Database.Database) {
+  const insert = db.prepare(`
+    INSERT OR IGNORE INTO products (
+      id, slug, name, brand, tagline, description, price, currency,
+      image_url, gallery_urls, category_slug, affiliate_url, merchant,
+      certifications, goals, rating, is_editor_pick, is_featured,
+      pros, cons, ingredients, serving_size
+    ) VALUES (
+      @id, @slug, @name, @brand, @tagline, @description, @price, @currency,
+      @imageUrl, @galleryUrls, @categorySlug, @affiliateUrl, @merchant,
+      @certifications, @goals, @rating, @isEditorPick, @isFeatured,
+      @pros, @cons, @ingredients, @servingSize
+    )
+  `);
+
+  let added = 0;
+  const tx = db.transaction(() => {
+    for (const p of thorneExtras) {
+      const result = insert.run({
+        ...p,
+        galleryUrls: JSON.stringify(p.galleryUrls || []),
+        certifications: JSON.stringify(p.certifications || []),
+        goals: JSON.stringify(p.goals || []),
+        pros: JSON.stringify(p.pros || []),
+        cons: JSON.stringify(p.cons || []),
+        ingredients: p.ingredients || null,
+        servingSize: p.servingSize || null,
+        isEditorPick: p.isEditorPick ? 1 : 0,
+        isFeatured: p.isFeatured ? 1 : 0,
+      });
+      if (result.changes > 0) added++;
+    }
+  });
+  tx();
+  if (added > 0) {
+    console.log(`[db] Added ${added} extra Thorne product(s) via idempotent seed`);
+  }
 }
