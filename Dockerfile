@@ -1,42 +1,28 @@
-# Production Dockerfile for Next.js with shadcn/ui
-# Uses prebuilt base image for faster builds
-
-# Build stage - uses base image with node_modules pre-installed
+# Production Dockerfile for Next.js + better-sqlite3 (native module)
 ARG BASE_IMAGE=node:20-slim
+
+# ---- Builder: full toolchain so better-sqlite3 can compile ----
 FROM ${BASE_IMAGE} AS builder
 
 WORKDIR /app
 
-# Copy package files first for better layer caching
-COPY package*.json ./
+# Install build deps for native modules (better-sqlite3 needs python + g++)
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends python3 make g++ ca-certificates && \
+    rm -rf /var/lib/apt/lists/*
 
-# Install/update dependencies
-# If base image has node_modules, npm install only adds new packages (fast)
-# If no node_modules, does full install (slower but still works)
+# Install JS deps
+COPY package*.json ./
 RUN npm install
 
-# Copy source code
+# Build the Next.js app
 COPY . .
-
-# Ensure standalone output is enabled
-RUN if ! grep -q "output.*standalone" next.config.js 2>/dev/null && \
-       ! grep -q "output.*standalone" next.config.mjs 2>/dev/null; then \
-      if [ -f next.config.js ]; then \
-        sed -i "s/const nextConfig = {/const nextConfig = {\n  output: 'standalone',/" next.config.js || true; \
-      elif [ -f next.config.mjs ]; then \
-        sed -i "s/const nextConfig = {/const nextConfig = {\n  output: 'standalone',/" next.config.mjs || true; \
-      fi; \
-    fi
-
-# Build the Next.js application
 ENV NEXT_TELEMETRY_DISABLED=1
 ENV NODE_ENV=production
 RUN npm run build
-
-# Create public folder if it doesn't exist
 RUN mkdir -p public
 
-# Production image - minimal runtime (reuse base image to avoid re-downloading node)
+# ---- Runner: lean image ----
 FROM ${BASE_IMAGE} AS runner
 
 WORKDIR /app
@@ -44,16 +30,17 @@ WORKDIR /app
 ENV NODE_ENV=production
 ENV NEXT_TELEMETRY_DISABLED=1
 
-# Create non-root user for security
+# Non-root user
 RUN addgroup --system --gid 1001 nodejs && \
     adduser --system --uid 1001 nextjs
 
-# Copy standalone server (includes server.js and node_modules)
+# Standalone server bundle (includes node_modules incl. compiled better-sqlite3)
 COPY --from=builder --chown=nextjs:nodejs /app/.next-build/standalone ./
-# Copy static files to .next/static (required path for standalone server)
 COPY --from=builder --chown=nextjs:nodejs /app/.next-build/static ./.next-build/static
-# Copy public folder
 COPY --from=builder /app/public ./public
+
+# Create + own data dir (Railway volume will mount over this)
+RUN mkdir -p /app/data-store && chown -R nextjs:nodejs /app/data-store
 
 USER nextjs
 
