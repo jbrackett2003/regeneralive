@@ -11,6 +11,7 @@ import { ProductCard } from "@/components/product/product-card";
 import { Markdown } from "@/lib/markdown";
 import { ArrowUpRight, Check, Star, Info, ChevronRight } from "lucide-react";
 import { SectionHeader } from "@/components/site/section";
+import { DiscountChip } from "@/components/product/discount-chip";
 import type { Metadata } from "next";
 
 export const dynamic = "force-dynamic";
@@ -197,6 +198,9 @@ export default async function ProductPage({
                     only recommend products we'd give to family.
                   </span>
                 </p>
+
+                {/* Reader discount code (auto-shown for brands in BRAND_DISCOUNTS) */}
+                <DiscountChip brand={product.brand} variant="page" />
               </div>
 
               {/* details table */}

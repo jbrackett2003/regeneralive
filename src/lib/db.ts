@@ -6,6 +6,7 @@ import { products as seedProducts } from "@/data/seed-products";
 import { articles as seedArticles } from "@/data/seed-articles";
 import { thorneExtras } from "@/data/seed-thorne-extras";
 import { thorneExtras2 } from "@/data/seed-thorne-extras-2";
+import { thorneExtras3 } from "@/data/seed-thorne-extras-3";
 import { regenFoods } from "@/data/seed-regen-foods";
 import { seoArticles } from "@/data/seed-articles-2";
 
@@ -275,7 +276,12 @@ function seedExtras(db: Database.Database) {
   `);
 
   // All products that get the additive idempotent seed treatment
-  const allExtras = [...thorneExtras, ...thorneExtras2, ...regenFoods];
+  const allExtras = [
+    ...thorneExtras,
+    ...thorneExtras2,
+    ...thorneExtras3,
+    ...regenFoods,
+  ];
 
   let added = 0;
   const tx = db.transaction(() => {

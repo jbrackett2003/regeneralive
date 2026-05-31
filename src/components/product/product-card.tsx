@@ -1,7 +1,8 @@
 import Image from "next/image";
 import Link from "next/link";
 import type { Product } from "@/data/types";
-import { Star, Sparkles } from "lucide-react";
+import { Star, Sparkles, Tag } from "lucide-react";
+import { getBrandDiscount } from "@/data/brand-discounts";
 
 interface Props {
   product: Product;
@@ -27,6 +28,7 @@ export function ProductCard({ product, variant = "default" }: Props) {
         ((product.originalPrice! - product.price) / product.originalPrice!) * 100
       )
     : null;
+  const discount = getBrandDiscount(product.brand);
 
   return (
     <Link
@@ -94,6 +96,12 @@ export function ProductCard({ product, variant = "default" }: Props) {
         <p className="mt-1.5 line-clamp-2 text-sm text-ink/60">
           {product.tagline}
         </p>
+        {discount && (
+          <p className="mt-2 inline-flex items-center gap-1 text-[11px] font-semibold uppercase tracking-[0.12em] text-moss">
+            <Tag className="h-2.5 w-2.5" />
+            Code {discount.code} · 10% off
+          </p>
+        )}
         <div className="mt-3 flex items-center justify-between gap-3">
           <div className="flex items-center gap-1.5">
             <Star className="h-3.5 w-3.5 fill-sun text-sun" strokeWidth={1} />
