@@ -5,6 +5,7 @@ import { Header } from "@/components/site/header";
 import { Footer } from "@/components/site/footer";
 import { DisclosureBanner } from "@/components/site/disclosure-banner";
 import { PromoBanner } from "@/components/site/promo-banner";
+import { getAllCategories } from "@/data/categories";
 
 const fraunces = Fraunces({
   variable: "--font-fraunces",
@@ -49,6 +50,11 @@ export default async function RootLayout({
   const hdrs = await headers();
   const pathname = hdrs.get("x-pathname") || "";
   const isAdmin = pathname.startsWith("/admin");
+  const navCategories = getAllCategories().map((c) => ({
+    slug: c.slug,
+    name: c.name,
+    emoji: c.emoji,
+  }));
   return (
     <html
       lang="en"
@@ -61,7 +67,7 @@ export default async function RootLayout({
           <>
             <PromoBanner />
             <DisclosureBanner />
-            <Header />
+            <Header categories={navCategories} />
             <main className="relative z-[2]">{children}</main>
             <Footer />
           </>

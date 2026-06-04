@@ -73,7 +73,12 @@ export function Footer() {
                   All products
                 </Link>
               </li>
-              {categories.slice(0, 6).map((c) => (
+              <li>
+                <Link href="/shop?deals=1" className="link-underline text-bone/80 hover:text-bone">
+                  Live deals
+                </Link>
+              </li>
+              {categories.map((c) => (
                 <li key={c.slug}>
                   <Link
                     href={`/category/${c.slug}`}

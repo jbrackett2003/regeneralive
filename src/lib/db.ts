@@ -8,6 +8,7 @@ import { thorneExtras } from "@/data/seed-thorne-extras";
 import { thorneExtras2 } from "@/data/seed-thorne-extras-2";
 import { thorneExtras3 } from "@/data/seed-thorne-extras-3";
 import { regenFoods } from "@/data/seed-regen-foods";
+import { balanceCategories } from "@/data/seed-balance-categories";
 import { seoArticles } from "@/data/seed-articles-2";
 
 const DATA_DIR =
@@ -281,6 +282,7 @@ function seedExtras(db: Database.Database) {
     ...thorneExtras2,
     ...thorneExtras3,
     ...regenFoods,
+    ...balanceCategories,
   ];
 
   let added = 0;

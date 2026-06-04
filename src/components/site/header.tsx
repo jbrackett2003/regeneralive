@@ -5,14 +5,20 @@ import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Menu, X } from "lucide-react";
 import { Logo } from "./logo";
+import { HeaderShopMenu } from "./header-shop-menu";
 
-const nav = [
-  { href: "/shop", label: "Shop" },
+interface CategoryItem {
+  slug: string;
+  name: string;
+  emoji?: string;
+}
+
+const otherNav = [
   { href: "/journal", label: "Journal" },
   { href: "/about", label: "About" },
 ];
 
-export function Header() {
+export function Header({ categories }: { categories: CategoryItem[] }) {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
   const pathname = usePathname() || "/";
@@ -32,6 +38,8 @@ export function Header() {
   const isActive = (href: string) =>
     href === "/" ? pathname === "/" : pathname.startsWith(href);
 
+  const shopActive = pathname.startsWith("/shop") || pathname.startsWith("/category");
+
   return (
     <header
       className={`sticky top-0 z-40 transition-all duration-300 ${
@@ -44,7 +52,8 @@ export function Header() {
         <Logo />
 
         <nav className="hidden items-center gap-10 md:flex">
-          {nav.map((n) => {
+          <HeaderShopMenu categories={categories} active={shopActive} />
+          {otherNav.map((n) => {
             const active = isActive(n.href);
             return (
               <Link
@@ -83,7 +92,7 @@ export function Header() {
 
       {/* Mobile menu */}
       {open && (
-        <div className="fixed inset-0 z-[60] bg-bone md:hidden">
+        <div className="fixed inset-0 z-[60] overflow-y-auto bg-bone md:hidden">
           <div className="container-x flex h-16 items-center justify-between">
             <Logo />
             <button
@@ -95,22 +104,44 @@ export function Header() {
               <X className="h-5 w-5" />
             </button>
           </div>
-          <nav className="container-x flex flex-col gap-2 pt-8">
-            {nav.map((n) => {
+          <nav className="container-x flex flex-col gap-1 pb-20 pt-6">
+            <Link
+              href="/shop"
+              onClick={() => setOpen(false)}
+              className={`flex items-center justify-between border-b border-ink/10 py-5 font-serif text-3xl ${
+                shopActive ? "text-moss italic" : "text-ink"
+              }`}
+            >
+              Shop all
+            </Link>
+
+            <p className="label-mono mt-4 text-ink/45">Categories</p>
+            <div className="grid grid-cols-2 gap-1">
+              {categories.map((c) => (
+                <Link
+                  key={c.slug}
+                  href={`/category/${c.slug}`}
+                  onClick={() => setOpen(false)}
+                  className="flex items-center gap-2 rounded-lg px-2 py-3 text-base text-ink/80 hover:bg-bone-2"
+                >
+                  {c.emoji && <span>{c.emoji}</span>}
+                  <span>{c.name}</span>
+                </Link>
+              ))}
+            </div>
+
+            {otherNav.map((n) => {
               const active = isActive(n.href);
               return (
                 <Link
                   key={n.href}
                   href={n.href}
                   onClick={() => setOpen(false)}
-                  className={`flex items-center justify-between border-b border-ink/10 py-5 font-serif text-3xl ${
+                  className={`mt-1 flex items-center justify-between border-b border-ink/10 py-5 font-serif text-3xl ${
                     active ? "text-moss italic" : "text-ink"
                   }`}
                 >
                   {n.label}
-                  {active && (
-                    <span className="text-base text-moss/60">·</span>
-                  )}
                 </Link>
               );
             })}

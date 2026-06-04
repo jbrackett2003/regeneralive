@@ -50,8 +50,38 @@ export default async function ProductPage({
   const related = getRelatedProducts(slug, 4);
   const gallery = [product.imageUrl, ...(product.galleryUrls || [])].slice(0, 4);
 
+  // JSON-LD product schema for SEO
+  const jsonLd = {
+    "@context": "https://schema.org/",
+    "@type": "Product",
+    name: product.name,
+    image: gallery,
+    description: product.tagline,
+    brand: { "@type": "Brand", name: product.brand },
+    sku: product.slug,
+    aggregateRating: {
+      "@type": "AggregateRating",
+      ratingValue: product.rating.toFixed(1),
+      reviewCount: 1,
+      bestRating: 5,
+    },
+    offers: {
+      "@type": "Offer",
+      url: `https://regeneralive.com/product/${product.slug}`,
+      priceCurrency: product.currency || "USD",
+      price: product.price.toFixed(2),
+      availability: "https://schema.org/InStock",
+      seller: { "@type": "Organization", name: product.merchant },
+    },
+  };
+
   return (
     <>
+      <script
+        type="application/ld+json"
+        // eslint-disable-next-line react/no-danger
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       {/* Breadcrumbs */}
       <div className="container-x pt-10">
         <nav className="flex items-center gap-1.5 text-xs text-ink/50">
