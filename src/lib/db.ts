@@ -11,6 +11,10 @@ import { regenFoods } from "@/data/seed-regen-foods";
 import { balanceCategories } from "@/data/seed-balance-categories";
 import { thorne50 } from "@/data/seed-thorne-50";
 import { regenBrands } from "@/data/seed-regen-brands";
+import { vivtrueSupplements } from "@/data/seed-vivtrue-supplements";
+import { vivtrueFoods } from "@/data/seed-vivtrue-foods";
+import { vivtrueWearables } from "@/data/seed-vivtrue-wearables";
+import { vivtrueHome } from "@/data/seed-vivtrue-home";
 import { seoArticles } from "@/data/seed-articles-2";
 
 const DATA_DIR =
@@ -159,6 +163,11 @@ function initSchema(db: Database.Database) {
     /* column already exists */
   }
 
+  // Idempotent additive category seed — INSERT OR IGNORE so any new
+  // top-level categories defined in code (e.g., wearables-tech, healthy-home)
+  // surface automatically on next deploy without clobbering existing rows.
+  seedExtraCategories(db);
+
   // Idempotent extras seed — runs every boot, but uses INSERT OR IGNORE so
   // existing slugs are NOT overwritten. New products defined in code get
   // added on next deploy without disturbing user-edited content.
@@ -260,6 +269,36 @@ function seedFromTsData(db: Database.Database) {
 }
 
 /**
+ * Idempotent additive category seed — only inserts categories whose slug
+ * doesn't already exist. Used to introduce new top-level categories
+ * (e.g. wearables-tech, healthy-home) on already-seeded databases without
+ * clobbering admin-edited rows.
+ */
+function seedExtraCategories(db: Database.Database) {
+  const insert = db.prepare(`
+    INSERT OR IGNORE INTO categories
+      (id, slug, name, tagline, description, image_url, emoji, sort_order)
+    VALUES
+      (@id, @slug, @name, @tagline, @description, @imageUrl, @emoji, @order)
+  `);
+
+  let added = 0;
+  const tx = db.transaction(() => {
+    for (const c of seedCategories) {
+      const r = insert.run({
+        ...c,
+        emoji: c.emoji || null,
+      });
+      if (r.changes > 0) added++;
+    }
+  });
+  tx();
+  if (added > 0) {
+    console.log(`[db] Added ${added} new top-level category(ies) via idempotent seed`);
+  }
+}
+
+/**
  * Idempotent additive seed — only inserts products whose slug doesn't already
  * exist. Safe to run on every boot; existing edits are preserved.
  */
@@ -287,6 +326,10 @@ function seedExtras(db: Database.Database) {
     ...balanceCategories,
     ...thorne50,
     ...regenBrands,
+    ...vivtrueSupplements,
+    ...vivtrueFoods,
+    ...vivtrueWearables,
+    ...vivtrueHome,
   ];
 
   let added = 0;

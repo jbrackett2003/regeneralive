@@ -97,6 +97,30 @@ export const categories: Category[] = [
     emoji: "🌙",
     order: 8,
   },
+  {
+    id: "c9",
+    slug: "wearables-tech",
+    name: "Wearables & Recovery Tech",
+    tagline: "The body, instrumented.",
+    description:
+      "Sleep rings, HRV bands, glucose monitors, red-light masks, vagus-nerve devices, percussion guns — the tools that turn how you feel into something you can measure and improve.",
+    imageUrl:
+      "https://images.unsplash.com/photo-1575311373937-040b8e1fd5b6?auto=format&fit=crop&w=1600&q=80",
+    emoji: "⌚",
+    order: 9,
+  },
+  {
+    id: "c10",
+    slug: "healthy-home",
+    name: "Healthy Home",
+    tagline: "Cleaner air, water, sleep, and surfaces.",
+    description:
+      "Reverse-osmosis water, true-HEPA + carbon air, infrared sauna, organic mattresses, non-toxic cleaning. The exposures you can actually control.",
+    imageUrl:
+      "https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?auto=format&fit=crop&w=1600&q=80",
+    emoji: "🏡",
+    order: 10,
+  },
 ];
 
 export function getCategoryBySlug(slug: string): Category | undefined {
