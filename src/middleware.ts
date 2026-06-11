@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from "next/server";
+import { type NextRequest, NextResponse } from "next/server";
 
 // We use Edge-compatible HMAC verification here (no bcrypt or sqlite at the edge).
 // This is a thin gate; the actual login uses bcrypt in a Node route handler.
@@ -29,7 +29,7 @@ async function isValid(token: string | undefined, secret: string): Promise<boole
   if (parts.length !== 3) return false;
   const [role, expStr, sig] = parts;
   if (role !== "admin") return false;
-  const exp = parseInt(expStr, 10);
+  const exp = Number.parseInt(expStr, 10);
   if (!Number.isFinite(exp) || exp < Math.floor(Date.now() / 1000)) return false;
   const expected = await hmac(secret, `${role}:${exp}`);
   if (sig.length !== expected.length) return false;

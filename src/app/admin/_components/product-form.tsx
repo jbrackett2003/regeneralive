@@ -363,7 +363,7 @@ export function ProductForm({
                 step="0.01"
                 min="0"
                 value={v.price}
-                onChange={(e) => update("price", parseFloat(e.target.value) || 0)}
+                onChange={(e) => update("price", Number.parseFloat(e.target.value) || 0)}
                 required
                 className="input"
               />
@@ -394,7 +394,7 @@ export function ProductForm({
                 min="0"
                 max="5"
                 value={v.rating}
-                onChange={(e) => update("rating", parseFloat(e.target.value) || 0)}
+                onChange={(e) => update("rating", Number.parseFloat(e.target.value) || 0)}
                 className="input"
               />
             </Field>

@@ -214,7 +214,7 @@ export default async function ProductPage({
                 </p>
                 <a
                   href={`/go/${product.slug}?src=product-page`}
-                  rel="sponsored noopener nofollow"
+                  rel="noreferrer sponsored noopener nofollow"
                   target="_blank"
                   className="mt-5 flex items-center justify-center gap-2 rounded-full bg-ink py-4 text-sm font-medium text-bone transition-all hover:bg-moss hover:shadow-lg hover:shadow-moss/20 active:scale-[0.98]"
                 >

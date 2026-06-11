@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from "next/server";
+import { type NextRequest, NextResponse } from "next/server";
 import { addSubscriber } from "@/lib/store";
 
 const emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;

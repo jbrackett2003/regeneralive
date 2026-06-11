@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from "next/server";
+import { type NextRequest, NextResponse } from "next/server";
 import { updatePromotion, deletePromotion } from "@/lib/repos";
 
 export const runtime = "nodejs";

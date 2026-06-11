@@ -204,7 +204,7 @@ export function ArticleForm({
               <input value={v.authorRole} onChange={(e) => update("authorRole", e.target.value)} className="input" placeholder="e.g. Editor" />
             </Field>
             <Field label="Read time (minutes)">
-              <input type="number" min="1" value={v.readTime} onChange={(e) => update("readTime", parseInt(e.target.value) || 5)} className="input" />
+              <input type="number" min="1" value={v.readTime} onChange={(e) => update("readTime", Number.parseInt(e.target.value) || 5)} className="input" />
             </Field>
           </Card>
 

@@ -61,7 +61,7 @@ export function isValidSessionToken(token: string | undefined): boolean {
   if (parts.length !== 3) return false;
   const [role, expStr, sig] = parts;
   if (role !== "admin") return false;
-  const exp = parseInt(expStr, 10);
+  const exp = Number.parseInt(expStr, 10);
   if (!Number.isFinite(exp) || exp < Math.floor(Date.now() / 1000)) return false;
   const expected = sign(`${role}:${exp}`);
   // Constant-time compare

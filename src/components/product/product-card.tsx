@@ -97,7 +97,7 @@ export function ProductCard({ product, variant = "default" }: Props) {
           {product.tagline}
         </p>
         {discount && (
-          <p className="mt-2 inline-flex items-center gap-1 text-[11px] font-semibold uppercase tracking-[0.12em] text-moss">
+          <p className="mt-2 inline-flex flex-wrap items-center gap-1 text-[11px] font-semibold uppercase tracking-[0.12em] text-moss">
             <Tag className="h-2.5 w-2.5" />
             Code {discount.code} · 10% off
           </p>

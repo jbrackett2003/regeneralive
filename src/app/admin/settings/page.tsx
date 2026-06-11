@@ -24,7 +24,7 @@ export default function SettingsPage() {
         <h3 className="font-serif text-lg text-ink mb-2">Affiliate disclosure</h3>
         <p className="text-sm text-ink/60">
           Your site already includes FTC-compliant affiliate disclosures on every product card and detail page, plus a dedicated{" "}
-          <a href="/disclosure" target="_blank" className="underline">disclosure page</a>.
+          <a href="/disclosure" target="_blank" className="underline" rel="noreferrer">disclosure page</a>.
           This is required by law for all affiliate sites.
         </p>
       </div>

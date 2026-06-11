@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from "next/server";
+import { type NextRequest, NextResponse } from "next/server";
 import { verifyPassword, setSessionCookie } from "@/lib/auth";
 
 export const runtime = "nodejs";
