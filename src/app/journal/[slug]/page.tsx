@@ -47,7 +47,7 @@ export default async function ArticlePage({
     <>
       <article>
         <div className="container-x pt-10">
-          <nav className="flex items-center gap-1.5 text-xs text-ink/50">
+          <nav className="flex flex-wrap items-center gap-x-1.5 gap-y-2 text-xs text-ink/50">
             <Link href="/" className="hover:text-ink">
               Home
             </Link>
