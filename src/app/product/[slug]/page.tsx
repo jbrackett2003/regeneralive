@@ -50,8 +50,8 @@ export default async function ProductPage({
   const related = getRelatedProducts(slug, 4);
   const gallery = [product.imageUrl, ...(product.galleryUrls || [])].slice(0, 4);
 
-  // JSON-LD product schema for SEO
-  const jsonLd = {
+  // JSON-LD: Product + Review + BreadcrumbList for rich SEO results
+  const productJsonLd = {
     "@context": "https://schema.org/",
     "@type": "Product",
     name: product.name,
@@ -59,11 +59,29 @@ export default async function ProductPage({
     description: product.tagline,
     brand: { "@type": "Brand", name: product.brand },
     sku: product.slug,
+    category: category?.name,
     aggregateRating: {
       "@type": "AggregateRating",
       ratingValue: product.rating.toFixed(1),
       reviewCount: 1,
       bestRating: 5,
+    },
+    review: {
+      "@type": "Review",
+      reviewRating: {
+        "@type": "Rating",
+        ratingValue: product.rating.toFixed(1),
+        bestRating: 5,
+      },
+      author: {
+        "@type": "Organization",
+        name: "Regeneralive Editors",
+      },
+      publisher: {
+        "@type": "Organization",
+        name: "Regeneralive",
+      },
+      reviewBody: product.tagline,
     },
     offers: {
       "@type": "Offer",
@@ -75,12 +93,49 @@ export default async function ProductPage({
     },
   };
 
+  const breadcrumbJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: "Home",
+        item: "https://regeneralive.com",
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: "Shop",
+        item: "https://regeneralive.com/shop",
+      },
+      ...(category
+        ? [
+            {
+              "@type": "ListItem",
+              position: 3,
+              name: category.name,
+              item: `https://regeneralive.com/category/${category.slug}`,
+            },
+          ]
+        : []),
+      {
+        "@type": "ListItem",
+        position: category ? 4 : 3,
+        name: product.name,
+        item: `https://regeneralive.com/product/${product.slug}`,
+      },
+    ],
+  };
+
   return (
     <>
       <script
         type="application/ld+json"
         // eslint-disable-next-line react/no-danger
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify([productJsonLd, breadcrumbJsonLd]),
+        }}
       />
       {/* Breadcrumbs */}
       <div className="container-x pt-10">

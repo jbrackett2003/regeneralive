@@ -43,8 +43,41 @@ export default async function ArticlePage({
     .map((s) => getProductBySlug(s))
     .filter(Boolean);
 
+  const articleJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    headline: a.title,
+    description: a.dek,
+    image: [a.coverImage],
+    datePublished: a.publishedAt,
+    dateModified: a.publishedAt,
+    author: {
+      "@type": "Person",
+      name: a.author,
+      jobTitle: a.authorRole,
+    },
+    publisher: {
+      "@type": "Organization",
+      name: "Regeneralive",
+      logo: {
+        "@type": "ImageObject",
+        url: "https://regeneralive.com/icon.png",
+      },
+    },
+    mainEntityOfPage: {
+      "@type": "WebPage",
+      "@id": `https://regeneralive.com/journal/${a.slug}`,
+    },
+    keywords: a.tags?.join(", "),
+  };
+
   return (
     <>
+      <script
+        type="application/ld+json"
+        // eslint-disable-next-line react/no-danger
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd) }}
+      />
       <article>
         <div className="container-x pt-10">
           <nav className="flex flex-wrap items-center gap-x-1.5 gap-y-2 text-xs text-ink/50">

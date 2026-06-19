@@ -61,6 +61,39 @@ export default async function RootLayout({
       className={`${fraunces.variable} ${interTight.variable} ${jetbrains.variable}`}
     >
       <body suppressHydrationWarning className="antialiased">
+        {/* Sitewide Organization + WebSite JSON-LD for SEO */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify([
+              {
+                "@context": "https://schema.org",
+                "@type": "Organization",
+                name: "Regeneralive",
+                url: "https://regeneralive.com",
+                logo: "https://regeneralive.com/icon.png",
+                sameAs: ["https://instagram.com/regeneralive"],
+                description:
+                  "An independent editorial guide to regenerative organic foods, premium supplements, and wellness devices.",
+              },
+              {
+                "@context": "https://schema.org",
+                "@type": "WebSite",
+                name: "Regeneralive",
+                url: "https://regeneralive.com",
+                potentialAction: {
+                  "@type": "SearchAction",
+                  target: {
+                    "@type": "EntryPoint",
+                    urlTemplate:
+                      "https://regeneralive.com/shop?q={search_term_string}",
+                  },
+                  "query-input": "required name=search_term_string",
+                },
+              },
+            ]),
+          }}
+        />
         {isAdmin ? (
           children
         ) : (

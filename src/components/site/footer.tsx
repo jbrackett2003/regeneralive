@@ -119,6 +119,21 @@ export function Footer() {
                 </Link>
               </li>
               <li>
+                <Link href="/methodology" className="link-underline text-bone/80 hover:text-bone">
+                  Methodology
+                </Link>
+              </li>
+              <li>
+                <Link href="/our-standards" className="link-underline text-bone/80 hover:text-bone">
+                  Our standards
+                </Link>
+              </li>
+              <li>
+                <Link href="/quiz" className="link-underline text-bone/80 hover:text-bone">
+                  Goal recommender
+                </Link>
+              </li>
+              <li>
                 <Link href="/contact" className="link-underline text-bone/80 hover:text-bone">
                   Contact
                 </Link>

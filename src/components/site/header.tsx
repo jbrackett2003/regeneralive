@@ -15,6 +15,7 @@ interface CategoryItem {
 
 const otherNav = [
   { href: "/journal", label: "Journal" },
+  { href: "/quiz", label: "Quiz" },
   { href: "/about", label: "About" },
 ];
 
