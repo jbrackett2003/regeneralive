@@ -424,7 +424,7 @@ export default function HomePage() {
                   "We vote with every bite — for soil that's healing, or soil
                   that's burning."
                 </p>
-                <p className="label-mono mt-3 text-ink/50">— Iris Mendoza</p>
+                <p className="label-mono mt-3 text-ink/50">— Regeneralive</p>
               </div>
             </div>
           </div>

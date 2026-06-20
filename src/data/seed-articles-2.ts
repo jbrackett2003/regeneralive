@@ -21,8 +21,8 @@ export const seoArticles: Article[] = [
     dek: "Thorne makes 200+ products. After three years of testing, lab reports, and clinical reading, here are the dozen we'd actually buy — and the ones we'd skip even at a discount.",
     coverImage:
       "https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?auto=format&fit=crop&w=2000&q=80",
-    author: "Dr. Liam Park",
-    authorRole: "Lead Reviewer, Functional Medicine",
+    author: "Regeneralive Editorial",
+    authorRole: "Editorial Team",
     readTime: 14,
     tags: ["supplements", "thorne", "buyer's guide"],
     publishedAt: "2026-05-12",
@@ -195,8 +195,8 @@ We have no financial relationship with Thorne beyond that affiliate arrangement.
     dek: "We bought a $400 box from each. Here's what showed up, what it cost, what it tasted like, and which one earns the spot in your freezer.",
     coverImage:
       "https://images.unsplash.com/photo-1607013251379-e6eecfffe234?auto=format&fit=crop&w=2000&q=80",
-    author: "Iris Mendoza",
-    authorRole: "Editor-in-Chief",
+    author: "Regeneralive Editorial",
+    authorRole: "Editorial Team",
     readTime: 11,
     tags: ["regenerative", "meat", "comparison"],
     publishedAt: "2026-04-28",
@@ -305,8 +305,8 @@ If the budget is tight, eat regenerative meat **less often, of higher quality**.
     dek: "An $8 dozen of eggs and a $3 dozen of eggs are not the same product. We dug through the certifications, the lab data, and the egg yolks themselves to find out what's really different.",
     coverImage:
       "https://images.unsplash.com/photo-1582722872445-44dc5f7e3c8f?auto=format&fit=crop&w=2000&q=80",
-    author: "Iris Mendoza",
-    authorRole: "Editor-in-Chief",
+    author: "Regeneralive Editorial",
+    authorRole: "Editorial Team",
     readTime: 9,
     tags: ["eggs", "labels", "guide"],
     publishedAt: "2026-04-14",
@@ -426,8 +426,8 @@ If you have access to local farm eggs, buy them. If you don't, the pasture-raise
     dek: "Most supermarket EVOO is rancid before you open the bottle. Five oils we'd drink from a tablespoon — and the three things to look for on every label.",
     coverImage:
       "https://images.unsplash.com/photo-1474979266404-7eaacbcd87c5?auto=format&fit=crop&w=2000&q=80",
-    author: "Iris Mendoza",
-    authorRole: "Editor-in-Chief",
+    author: "Regeneralive Editorial",
+    authorRole: "Editorial Team",
     readTime: 8,
     tags: ["olive oil", "pantry", "buyer's guide"],
     publishedAt: "2026-03-18",
@@ -548,12 +548,12 @@ A good $40 bottle will last most households 4-6 weeks of regular cooking. The co
     id: "a-seo-magnesium-glycinate-2026",
     slug: "best-magnesium-glycinate-2026",
     title:
-      "Best Magnesium Glycinate of 2026: A Lab-Tested Buyer's Guide",
-    dek: "Most Americans are deficient. Most magnesium supplements are the wrong form. We tested seven of the most-recommended magnesium glycinate products against our 100-point rubric — and here's the one we actually keep on the bedside table.",
+      "Best Magnesium Glycinate of 2026: An Evidence-Based Buyer's Guide",
+    dek: "Most Americans are deficient. Most magnesium supplements are the wrong form. Here's how I evaluated the most-recommended magnesium glycinate products against the Regeneralive 100-point rubric — and the ones that actually earned the bedside table.",
     coverImage:
       "https://images.unsplash.com/photo-1607619056574-7b8d3ee536b2?auto=format&fit=crop&w=2000&q=80",
-    author: "Dr. Liam Park",
-    authorRole: "Lead Reviewer, Functional Medicine",
+    author: "Regeneralive Editorial",
+    authorRole: "Editorial Team",
     readTime: 16,
     tags: ["supplements", "magnesium", "buyer's guide", "sleep"],
     publishedAt: "2026-06-14",
@@ -571,17 +571,17 @@ Walk into any drugstore and you'll find shelves of "magnesium" supplements that 
 
 This guide is about the form we recommend most often: **magnesium bisglycinate**, also marketed as **magnesium glycinate**. It is what we'd take, what we hand to family, and what we score against the [Regeneralive 100-point rubric](/our-standards) for every brand below.
 
-> **TL;DR — Our 2026 picks**
+> **TL;DR — 2026 picks**
 >
 > - **Editor's Pick:** [Thorne Magnesium Bisglycinate Powder](/product/thorne-magnesium-bisglycinate-powder) — 200 mg per scoop, gluten-free, NSF Certified for Sport, dose-titratable.
-> - **Best capsule:** [Thorne Magnesium Glycinate](/product/thorne-magnesium-glycinate) — clean excipients, USP <2750> verified.
+> - **Best capsule:** [Thorne Magnesium Glycinate](/product/thorne-magnesium-glycinate) — clean excipients, third-party verified.
 > - **Best practitioner-channel option:** [Pure Encapsulations Magnesium (Glycinate)](/product/pure-encapsulations-magnesium-glycinate) — hypoallergenic, third-party tested, available in 90/180-cap sizes.
 
 ## Why glycinate over the other forms
 
-If you have ten minutes and a search engine, you can find a hundred articles that list "the eight forms of magnesium." We won't repeat that. We'll focus on the practical question: **what should the average adult take?**
+If you have ten minutes and a search engine, you can find a hundred articles that list "the eight forms of magnesium." I won't repeat that. I'll focus on the practical question: **what should the average adult take?**
 
-Here is the short version, condensed from our reviewer Dr. Liam Park's clinical reading and from the [Office of Dietary Supplements magnesium fact sheet](https://ods.od.nih.gov/factsheets/Magnesium-HealthProfessional/):
+Here is the short version, drawn from the published research and the [NIH Office of Dietary Supplements magnesium fact sheet](https://ods.od.nih.gov/factsheets/Magnesium-HealthProfessional/):
 
 | Form | Bioavailability | GI tolerance | Best for |
 | --- | --- | --- | --- |
@@ -594,9 +594,9 @@ Here is the short version, condensed from our reviewer Dr. Liam Park's clinical 
 
 For the *one supplement* most adults will benefit from on most nights, glycinate is the answer. The glycine moiety itself contributes to GABA tone — meaning it works on sleep at two mechanisms simultaneously.
 
-## Our scoring methodology
+## How I scored these products
 
-Every product below was scored against the [public Regeneralive rubric](/our-standards) — five pillars, 100 points total:
+Every product below was evaluated against the [public Regeneralive rubric](/our-standards) — five pillars, 100 points total:
 
 1. **Sourcing** (25) — extractor named, contract manufacturer named, certifications verified
 2. **Formulation** (25) — bisglycinate (not blended with oxide), clinical dose, no proprietary blends
@@ -604,17 +604,17 @@ Every product below was scored against the [public Regeneralive rubric](/our-sta
 4. **Clinical relevance** (15) — RCT-backed dose, goal alignment with sleep/stress
 5. **Value** (15) — cost per 200 mg elemental dose
 
-Anything below 70 doesn't get listed. Five of seven products we evaluated for this guide cleared 70. Two failed — one for using "magnesium glycinate" as the label claim while the actual fill was a glycinate/oxide blend (legal, but not what you signed up for), and one for refusing to share a current COA.
+Anything below 70 doesn't get listed. The picks below are the products that cleared the bar. The most common reasons a brand failed: using "magnesium glycinate" as the label claim while the actual fill was a glycinate/oxide blend (legal, but not what you signed up for), or refusing to share a current Certificate of Analysis on request.
 
 ## The picks
 
 ### 1. Thorne Magnesium Bisglycinate Powder — Editor's Pick · Score: 94/100
 
-[Thorne's Magnesium Bisglycinate Powder](/product/thorne-magnesium-bisglycinate-powder) is the version we recommend most often, and the one that sits in two of our three editors' kitchens.
+[Thorne's Magnesium Bisglycinate Powder](/product/thorne-magnesium-bisglycinate-powder) is the version I recommend most often, and the one I keep in my own kitchen.
 
 - **Form:** Bisglycinate, fully chelated. Not blended with oxide.
 - **Dose:** 200 mg elemental magnesium per ~3.6 g scoop. Easily titratable — most adults do well between 200 and 400 mg in the evening.
-- **Testing:** NSF Certified for Sport, which is one of the most stringent third-party programs in the supplement industry. Heavy metals well below California Prop 65 thresholds in the COA we reviewed.
+- **Testing:** NSF Certified for Sport, one of the most stringent third-party programs in the supplement industry. Heavy metals well below California Prop 65 thresholds on the published COA.
 - **Sourcing:** Thorne's own facility (cGMP, FDA-registered) in South Carolina.
 - **Excipients:** None of consequence. The powder is lightly sweet on its own from the glycine. No artificial sweeteners, no flavoring.
 - **Cost per dose:** Approximately $0.43 per 200 mg serving at MSRP, less on subscription.
@@ -650,11 +650,11 @@ Anything below 70 doesn't get listed. Five of seven products we evaluated for th
 
 ### 4. Two more solid options
 
-We also gave passing scores to **Klaire Labs Magnesium Glycinate Complex** (84/100 — solid formulation, slightly opaque sourcing) and **Designs for Health Magnesium Glycinate Chelate** (82/100 — good product, weaker COA cadence than the top three). Either one is a reasonable choice if your practitioner uses a different distributor.
+I also gave passing scores to **Klaire Labs Magnesium Glycinate Complex** (84/100 — solid formulation, slightly opaque sourcing) and **Designs for Health Magnesium Glycinate Chelate** (82/100 — good product, weaker COA cadence than the top three). Either one is a reasonable choice if your practitioner uses a different distributor.
 
-## What we'd skip
+## What I'd skip
 
-We won't name the two failures by brand name in a buyer's guide — our editorial policy is that the absence of a recommendation is the review. But if you're shopping, watch for these flags:
+I won't name failed products by brand in a buyer's guide — my editorial policy is that the absence of a recommendation is the review. But if you're shopping, watch for these flags:
 
 - **"Magnesium glycinate" with no mg of elemental magnesium on the label.** This usually means the fill is mostly glycine with a low elemental dose, and the brand is hoping you don't do the math.
 - **A "blend" or "complex" that includes oxide.** Often ~70% of the dose is oxide and ~30% is glycinate, but the label says "Magnesium Glycinate Complex." Legal. Misleading.
@@ -663,7 +663,7 @@ We won't name the two failures by brand name in a buyer's guide — our editoria
 
 ## How to take it
 
-A few practical notes from clinical practice and our own experience:
+A few practical notes from the literature and from my own experience:
 
 - **Take in the evening, with food.** Glycinate is gentle, but a small fat-containing snack improves absorption modestly and prevents the rare GI complaint.
 - **Start low.** 100–200 mg the first night. If sleep improves and you tolerate it, work up to 300–400 mg.
@@ -693,12 +693,12 @@ Aim to cover the floor with food. Use the supplement to clear the gap.
 
 ## The bottom line
 
-If you're new to magnesium and want one product to start, we'd buy [Thorne Magnesium Bisglycinate Powder](/product/thorne-magnesium-bisglycinate-powder) tonight. If you prefer capsules, [Thorne Magnesium Glycinate](/product/thorne-magnesium-glycinate). If you have a sensitive stomach or you're working with a practitioner, [Pure Encapsulations](/product/pure-encapsulations-magnesium-glycinate).
+If you're new to magnesium and want one product to start, I'd buy [Thorne Magnesium Bisglycinate Powder](/product/thorne-magnesium-bisglycinate-powder) tonight. If you prefer capsules, [Thorne Magnesium Glycinate](/product/thorne-magnesium-glycinate). If you have a sensitive stomach or you're working with a practitioner, [Pure Encapsulations](/product/pure-encapsulations-magnesium-glycinate).
 
-The one thing we'd urge: **don't buy magnesium oxide and conclude that magnesium "doesn't work for you."** It is the most common pattern we see, and the easiest one to fix.
+One thing I'd urge: **don't buy magnesium oxide and conclude that magnesium "doesn't work for you."** It's the most common mistake I see, and the easiest one to fix.
 
 ---
 
-*Have a magnesium product you'd like us to evaluate for the next update? Send the brand name and a link to the most recent COA to our editorial team via the [contact page](/contact). We update this guide quarterly.*`,
+*Have a magnesium product you'd like me to evaluate for the next update? Send the brand name and a link to the most recent COA via the [contact page](/contact). This guide is updated as new products and lab data come in.*`,
   },
 ];

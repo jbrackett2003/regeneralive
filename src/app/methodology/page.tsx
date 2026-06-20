@@ -14,7 +14,7 @@ import {
 export const metadata = {
   title: "Our Methodology · How Regeneralive evaluates products",
   description:
-    "The full process we use to evaluate every food, supplement, and wellness device we recommend — from supplier traceability to third-party COA review and clinical relevance.",
+    "The criteria I use to evaluate every food, supplement, and wellness device that earns a place on Regeneralive — from supplier transparency to third-party COA review and clinical relevance.",
 };
 
 const phases = [
@@ -22,19 +22,19 @@ const phases = [
     step: "01",
     title: "Sourcing intake",
     icon: FileSearch,
-    body: "Every brand submits a sourcing dossier: farm or extractor of origin, contract manufacturer, country of cultivation, and harvest practices. If a brand can't or won't disclose, the product doesn't move forward — full stop.",
+    body: "Every brand has to clear a transparency check before I'll consider listing it. I want to know the farm or extractor of origin, the contract manufacturer, the country of cultivation, and the practices on the land. If a brand can't or won't disclose, the product doesn't move forward — full stop.",
     points: [
       "Farm or wild-harvest origin documented",
-      "Contract manufacturer named",
-      "Country of cultivation + harvest year",
-      "Regenerative or organic certifications verified at the registry",
+      "Contract manufacturer named (\"manufactured by,\" not just \"manufactured for\")",
+      "Country of cultivation documented",
+      "Regenerative or organic certifications verified at the registry, not just on the label",
     ],
   },
   {
     step: "02",
     title: "Formulation review",
     icon: Microscope,
-    body: "Our lead reviewer reads the supplement facts panel against the published clinical literature. We look for the right form of the active, the right co-factors, and a clinically meaningful dose — not a fairy-dust dose engineered for the label.",
+    body: "I read the supplement facts panel against the published clinical literature. The right form of the active ingredient, the right co-factors, and a clinically meaningful dose — not a fairy-dust dose engineered for the label.",
     points: [
       "Bioavailable form (e.g., methylated B-vitamins, glycinate vs. oxide)",
       "Clinically relevant dose vs. RDI vs. study dose",
@@ -46,7 +46,7 @@ const phases = [
     step: "03",
     title: "Independent COA review",
     icon: FlaskConical,
-    body: "We require a third-party Certificate of Analysis dated within the last 12 months. We read it. We compare label claim to assayed potency. We look at heavy metals, microbial counts, and residual solvents. Anomalies kill the listing.",
+    body: "I want to see a third-party Certificate of Analysis dated within the last 12 months. I read it. I compare label claim to assayed potency. I look at heavy metals, microbial counts, and residual solvents. Anomalies kill the listing.",
     points: [
       "ISO 17025-accredited lab preferred",
       "Heavy metals (Pb, Cd, As, Hg) below California Prop 65 thresholds",
@@ -58,7 +58,7 @@ const phases = [
     step: "04",
     title: "Clinical relevance check",
     icon: Stethoscope,
-    body: "Dr. Liam Park, our naturopath reviewer, asks one question: would I actually hand this to a patient? If the dose is fine but the pairing is wrong for the goal, we say so in the review. Real-world relevance over marketing claims.",
+    body: "Beyond \"does the dose match the studies\" is the harder question: does this product actually fit the goal someone would buy it for? I cross-reference each formulation against the relevant peer-reviewed literature and flag mismatches in the review when they're worth flagging.",
     points: [
       "Mechanism check against PubMed-indexed RCTs",
       "Goal alignment (sleep, stress, recovery, longevity, etc.)",
@@ -70,11 +70,11 @@ const phases = [
     step: "05",
     title: "Real-world use",
     icon: Sprout,
-    body: "We test it. Foods get cooked. Supplements get taken for at least 30 days by at least one editor. Wearables go on a wrist for the full battery cycle. We write the review only after living with the product.",
+    body: "I don't list things I haven't lived with. Foods get cooked. Supplements get taken. Devices go on a wrist or in a bedroom for the full battery cycle. The review only goes up after the product has been used — not just researched.",
     points: [
-      "Minimum 30-day evaluation window for supplements",
-      "Multi-week kitchen testing for foods",
-      "Devices used through a full charge / data cycle",
+      "Hands-on evaluation before publication",
+      "Notes on taste, texture, and kitchen use for foods",
+      "Real-world wear, app, and data quality for devices",
       "Notes on packaging, fulfillment, and customer service",
     ],
   },
@@ -82,11 +82,11 @@ const phases = [
     step: "06",
     title: "Pricing and value",
     icon: Scale,
-    body: "Premium pricing for a premium product is fine. Premium pricing for a marketing skin over commodity ingredients is not. We calculate cost-per-clinical-dose and compare against three to five peer products before scoring.",
+    body: "Premium pricing for a premium product is fine. Premium pricing for a marketing skin over commodity ingredients is not. I calculate cost-per-clinical-dose and benchmark against peer products before scoring.",
     points: [
       "Cost per serving + cost per active milligram",
       "Subscription discount honesty (true price vs. anchor price)",
-      "Peer benchmarking across 3–5 directly competing SKUs",
+      "Peer benchmarking across competing SKUs in the same category",
       "Shipping + return policy factored into final value score",
     ],
   },
@@ -94,7 +94,7 @@ const phases = [
     step: "07",
     title: "Editorial scoring",
     icon: Tag,
-    body: "We score on a 100-point rubric across five pillars (sourcing, formulation, testing, clinical relevance, value). Anything below 70 is a 'pass' — we don't publish it. Between 70 and 84 earns a standard listing. 85+ becomes an Editor's Pick.",
+    body: "Every product is scored against a 100-point rubric across five pillars: sourcing, formulation, testing, clinical relevance, and value. Anything below 70 is a 'pass' — it doesn't get published. Between 70 and 84 earns a standard listing. 85+ becomes an Editor's Pick.",
     points: [
       "Sourcing — 25 points",
       "Formulation — 25 points",
@@ -107,12 +107,12 @@ const phases = [
     step: "08",
     title: "Conflict-of-interest disclosure",
     icon: ShieldAlert,
-    body: "If we hold a financial interest beyond a standard affiliate relationship, we say so in the review header. We've turned down brands who wanted to pay for placement. We rotate paid promotion never with editorial review — it's a hard wall.",
+    body: "Affiliate commissions on outbound links are how this site stays free to read. I disclose them on every product page. I've turned down brands who wanted to pay for placement — that's a hard wall between editorial review and paid promotion.",
     points: [
       "Affiliate commissions disclosed on every product page",
       "No paid placement in editorial reviews — ever",
-      "Free samples noted in the review byline",
-      "Equity or advisory relationships disclosed prominently",
+      "Free samples noted in the review byline when received",
+      "Equity or advisory relationships disclosed prominently if any exist",
     ],
   },
 ];
@@ -141,14 +141,14 @@ export default function MethodologyPage() {
           </div>
           <div className="lg:col-span-5 lg:pt-12">
             <p className="text-lg text-ink/70 leading-relaxed">
-              We publish our methodology because you deserve to see the work.
-              Most affiliate sites don't. They rank by commission rate. We rank
-              by what we'd actually take, eat, or wear ourselves.
+              I publish my methodology because you deserve to see the work.
+              Most affiliate sites don't. They rank by commission rate. I rank
+              by what I'd actually take, eat, or wear myself.
             </p>
             <p className="mt-5 text-lg text-ink/70 leading-relaxed">
               Below is the full process — sourcing intake to editorial scoring
-              — that every brand on Regeneralive has walked through. It is
-              deliberately slow. That's the point.
+              — every brand on Regeneralive walks through. It's deliberately
+              slow. That's the point.
             </p>
           </div>
         </div>
@@ -176,9 +176,8 @@ export default function MethodologyPage() {
               Slow, on purpose.
             </h2>
             <p className="mt-6 text-ink/65 leading-relaxed">
-              We average 9–14 weeks per product from intake to publication.
-              Most listings on the internet take an afternoon. The difference
-              is in the bottle.
+              Listings on most affiliate sites take an afternoon. The
+              difference is in the bottle — and on the plate.
             </p>
           </div>
           <div className="md:col-span-8">
@@ -224,12 +223,13 @@ export default function MethodologyPage() {
             <div className="md:col-span-5">
               <p className="eyebrow">What didn't make it</p>
               <h2 className="mt-4 font-serif display-3 text-ink">
-                A short ledger of{" "}
-                <span className="italic text-clay">recent rejections.</span>
+                The kinds of red flags that{" "}
+                <span className="italic text-clay">end an evaluation.</span>
               </h2>
               <p className="mt-6 text-ink/65 leading-relaxed">
-                Anonymized but real. Every quarter we turn down 30–40% of the
-                brands that pitch us. Here's a slice of why.
+                These are the exact failure modes I look for in any product
+                under consideration. Any one of them is enough to take a brand
+                off the shortlist.
               </p>
             </div>
             <div className="md:col-span-7">
@@ -255,7 +255,7 @@ export default function MethodologyPage() {
       <section className="container-x py-24 text-center">
         <p className="eyebrow">Read more</p>
         <h2 className="mt-4 font-serif display-3 text-ink max-w-3xl mx-auto">
-          See the public scoring rubric we use on every review.
+          See the public scoring rubric I use on every review.
         </h2>
         <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
           <Link href="/our-standards" className="btn-primary">

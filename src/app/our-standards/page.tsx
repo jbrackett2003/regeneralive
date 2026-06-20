@@ -190,9 +190,10 @@ export default function StandardsPage() {
           </div>
           <div className="lg:col-span-5 lg:pt-12">
             <p className="text-lg text-ink/70 leading-relaxed">
-              This is the exact scoring template our reviewers use. Every
-              product on Regeneralive has a number behind it — and we'll happily
-              show you the math.
+              This is the exact scoring template I use to evaluate every
+              product before adding it to the site. Every listing on
+              Regeneralive has a number behind it — and I'll happily show you
+              the math.
             </p>
             <p className="mt-5 text-lg text-ink/70 leading-relaxed">
               Scores are revisited annually, or sooner if a brand changes

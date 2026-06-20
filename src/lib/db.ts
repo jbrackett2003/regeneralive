@@ -183,6 +183,12 @@ function initSchema(db: Database.Database) {
   // automatically on next deploy.
   seedExtraArticles(db);
 
+  // One-time editorial-byline migration — replaces fictional bylines
+  // ("Iris Mendoza", "Dr. Liam Park", "Naomi Becker") with the honest
+  // "Regeneralive Editorial" attribution on existing rows. Idempotent
+  // (controlled by a settings flag so it runs once).
+  migrateRemoveFictionalBylines(db);
+
   // Seed initial admin password hash if no setting exists yet.
   // (Bcrypt hash is one-way — safe to include in source.
   // User can change password via /admin/settings.)
@@ -483,6 +489,63 @@ function seedDealsOnce(db: Database.Database) {
  * articles aren't clobbered, but new articles defined in code surface
  * automatically on next deploy.
  */
+/**
+ * One-time migration: rewrite fictional editorial bylines on existing rows.
+ * Earlier versions of the seed files used invented author names. This brings
+ * existing DB rows in line with the current honest attribution. Runs once
+ * (gated by a settings flag) so re-deploys are no-ops.
+ *
+ * It also rewrites the magnesium-glycinate guide body if it still contains
+ * the old "we tested" / "Dr. Liam Park" prose, so the production DB matches
+ * the corrected seed.
+ */
+function migrateRemoveFictionalBylines(db: Database.Database) {
+  const FLAG_KEY = "migration:remove_fictional_bylines:v1";
+  const ran = db
+    .prepare("SELECT value FROM settings WHERE key = ?")
+    .get(FLAG_KEY) as { value: string } | undefined;
+  if (ran) return;
+
+  const tx = db.transaction(() => {
+    // Replace fictional author names everywhere they exist.
+    const update = db.prepare(
+      "UPDATE articles SET author = ?, author_role = ? WHERE author = ?"
+    );
+    update.run("Regeneralive Editorial", "Editorial Team", "Iris Mendoza");
+    update.run("Regeneralive Editorial", "Editorial Team", "Dr. Liam Park");
+    update.run("Regeneralive Editorial", "Editorial Team", "Naomi Becker");
+
+    // If the magnesium guide was inserted with the old prose, replace its
+    // body with the freshly-written one from the seed file.
+    try {
+      // Lazy require to avoid circular import on cold start.
+      const { seoArticles } = require("@/data/seed-articles-2");
+      const fresh = (seoArticles as Array<{ slug: string; body: string; title: string; dek: string }>).find(
+        (a) => a.slug === "best-magnesium-glycinate-2026"
+      );
+      if (fresh) {
+        db.prepare(
+          "UPDATE articles SET body = @body, title = @title, dek = @dek WHERE slug = @slug"
+        ).run({
+          slug: "best-magnesium-glycinate-2026",
+          body: fresh.body,
+          title: fresh.title,
+          dek: fresh.dek,
+        });
+      }
+    } catch {
+      // If the seed file path resolution fails at runtime (older bundle),
+      // skip silently — the new seed file will populate fresh installs.
+    }
+
+    db.prepare(
+      "INSERT OR REPLACE INTO settings (key, value) VALUES (?, ?)"
+    ).run(FLAG_KEY, new Date().toISOString());
+  });
+  tx();
+  console.log("[db] Migration: replaced fictional bylines on existing articles");
+}
+
 function seedExtraArticles(db: Database.Database) {
   const insert = db.prepare(`
     INSERT OR IGNORE INTO articles (
