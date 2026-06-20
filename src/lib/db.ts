@@ -16,6 +16,10 @@ import { vivtrueFoods } from "@/data/seed-vivtrue-foods";
 import { vivtrueWearables } from "@/data/seed-vivtrue-wearables";
 import { vivtrueHome } from "@/data/seed-vivtrue-home";
 import { seoArticles } from "@/data/seed-articles-2";
+import {
+  PRODUCT_IMAGE_OVERRIDES,
+  PRODUCT_IMAGES_VERSION,
+} from "@/data/product-image-overrides";
 
 const DATA_DIR =
   process.env.DATA_DIR || path.join(process.cwd(), "data-store");
@@ -188,6 +192,11 @@ function initSchema(db: Database.Database) {
   // "Regeneralive Editorial" attribution on existing rows. Idempotent
   // (controlled by a settings flag so it runs once).
   migrateRemoveFictionalBylines(db);
+
+  // Versioned migration: apply curated real-brand product imagery
+  // (replacing generic Unsplash stock photos). Runs whenever the
+  // PRODUCT_IMAGES_VERSION constant changes; same version = no-op.
+  migrateApplyProductImages(db);
 
   // Seed initial admin password hash if no setting exists yet.
   // (Bcrypt hash is one-way — safe to include in source.
@@ -544,6 +553,42 @@ function migrateRemoveFictionalBylines(db: Database.Database) {
   });
   tx();
   console.log("[db] Migration: replaced fictional bylines on existing articles");
+}
+
+/**
+ * Versioned migration: apply curated real-brand product imagery from
+ * `src/data/product-image-overrides.ts`. The companion image files live
+ * under `public/products/<slug>.<ext>` and are bundled with the Docker
+ * image, so URLs never expire. Gated by a settings flag keyed on
+ * PRODUCT_IMAGES_VERSION — bump that constant to apply a new batch.
+ */
+function migrateApplyProductImages(db: Database.Database) {
+  const FLAG_KEY = `migration:product_images:${PRODUCT_IMAGES_VERSION}`;
+  const ran = db
+    .prepare("SELECT value FROM settings WHERE key = ?")
+    .get(FLAG_KEY) as { value: string } | undefined;
+  if (ran) return;
+
+  const update = db.prepare(
+    "UPDATE products SET image_url = @image, updated_at = CURRENT_TIMESTAMP WHERE slug = @slug"
+  );
+  let applied = 0;
+  let missing = 0;
+  const tx = db.transaction(() => {
+    for (const [slug, image] of Object.entries(PRODUCT_IMAGE_OVERRIDES)) {
+      const r = update.run({ slug, image });
+      if (r.changes > 0) applied++;
+      else missing++;
+    }
+    db.prepare(
+      "INSERT OR REPLACE INTO settings (key, value) VALUES (?, ?)"
+    ).run(FLAG_KEY, new Date().toISOString());
+  });
+  tx();
+  console.log(
+    `[db] Migration ${FLAG_KEY}: applied ${applied} product image override(s)` +
+      (missing > 0 ? `, ${missing} slug(s) not found in DB` : "")
+  );
 }
 
 function seedExtraArticles(db: Database.Database) {
