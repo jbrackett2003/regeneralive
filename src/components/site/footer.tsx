@@ -39,7 +39,7 @@ export function Footer() {
         {/* Link columns */}
         <div className="grid gap-12 py-16 md:grid-cols-12 md:gap-8">
           <div className="md:col-span-4">
-            <Logo className="text-bone [&_span:last-child]:!text-bone [&_span:first-child]:!bg-bone [&_span:first-child]:!text-moss-deep" />
+            <Logo variant="dark" />
             <p className="mt-5 max-w-sm font-serif text-2xl italic leading-snug text-bone/90">
               Eat like the soil is alive.
             </p>
