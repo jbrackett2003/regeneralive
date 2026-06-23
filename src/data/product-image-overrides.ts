@@ -15,7 +15,7 @@
  * production each time the version changes. Because the version is a
  * settings flag, redeploys with the same version are no-ops.
  */
-export const PRODUCT_IMAGES_VERSION = "v2_2026_06_20";
+export const PRODUCT_IMAGES_VERSION = "v3_2026_06_23";
 
 export const PRODUCT_IMAGE_OVERRIDES: Record<string, string> = {
   // ── Regenerative pantry: meat brands (kill duplicate burger photos) ──
@@ -28,7 +28,7 @@ export const PRODUCT_IMAGE_OVERRIDES: Record<string, string> = {
   "butcherbox-grass-fed-beef-box": "/products/butcherbox-grass-fed-beef-box.jpg",
   "crowd-cow-grass-fed-beef-sampler":
     "/products/crowd-cow-grass-fed-beef-sampler.jpg",
-  "us-wellness-meats-sugar-steak": "/products/us-wellness-meats-sugar-steak.jpg",
+  "us-wellness-meats-sugar-steak": "/products/us-wellness-meats-sugar-steak.png",
   "wild-idea-buffalo-ribeye-steak":
     "/products/wild-idea-buffalo-ribeye-steak.jpg",
   "seven-sons-grass-fed-ground-beef":
@@ -43,7 +43,7 @@ export const PRODUCT_IMAGE_OVERRIDES: Record<string, string> = {
   "jovial-einkorn-pasta": "/products/jovial-einkorn-pasta.jpg",
   "frantoia-sicilian-olive-oil": "/products/frantoia-sicilian-olive-oil.jpg",
   "kerrygold-grass-fed-butter": "/products/kerrygold-grass-fed-butter.jpg",
-  "anson-mills-grits": "/products/anson-mills-grits.jpg",
+  "anson-mills-grits": "/products/anson-mills-grits.webp",
   "fly-by-jing-sichuan-chili-crisp":
     "/products/fly-by-jing-sichuan-chili-crisp.jpg",
   "brightland-arise-evoo": "/products/brightland-arise-evoo.jpg",
@@ -56,11 +56,11 @@ export const PRODUCT_IMAGE_OVERRIDES: Record<string, string> = {
   "momentous-creatine": "/products/momentous-creatine.png",
   "stargazer-cast-iron-skillet": "/products/stargazer-cast-iron-skillet.jpg",
   "vitamix-a3500-blender": "/products/vitamix-a3500-blender.jpg",
-  "anima-mundi-ceremonial-cacao": "/products/anima-mundi-ceremonial-cacao.jpg",
+  "anima-mundi-ceremonial-cacao": "/products/anima-mundi-ceremonial-cacao.png",
 
   // ── Featured-product photography (Thorne, filtration, broth, etc.) ──
   "thorne-basic-nutrients-2-day": "/products/thorne-basic-nutrients-2-day.png",
-  "thorne-vitamin-d-5000": "/products/thorne-vitamin-d-5000.jpg",
+  "thorne-vitamin-d-5000": "/products/thorne-vitamin-d-5000.png",
   "thorne-creatine": "/products/thorne-creatine.png",
   "thorne-resveracel": "/products/thorne-resveracel.png",
   "thorne-whey-protein-isolate-vanilla":
@@ -109,12 +109,12 @@ export const PRODUCT_IMAGE_OVERRIDES: Record<string, string> = {
     "/products/pure-encapsulations-magnesium-glycinate.jpg",
   "ritual-essential-for-women-18plus":
     "/products/ritual-essential-for-women-18plus.jpg",
-  "thorne-basic-prenatal": "/products/thorne-basic-prenatal.jpg",
+  "thorne-basic-prenatal": "/products/thorne-basic-prenatal.webp",
   "thorne-calcium-magnesium-citrate":
     "/products/thorne-calcium-magnesium-citrate.jpg",
   "thorne-prenatal-postnatal-dha":
     "/products/thorne-prenatal-postnatal-dha.jpg",
-  "coconut-cult-yogurt": "/products/coconut-cult-yogurt.jpg",
+  "coconut-cult-yogurt": "/products/coconut-cult-yogurt.webp",
   "boroux-original-gravity-filter":
     "/products/boroux-original-gravity-filter.jpg",
   "alexandre-family-farm-milk": "/products/alexandre-family-farm-milk.jpg",
@@ -141,8 +141,8 @@ export const PRODUCT_IMAGE_OVERRIDES: Record<string, string> = {
 
   // ── Pantry de-dup (kill remaining duplicate Unsplash photos) ──
   "crowd-cow-wagyu-bundle": "/products/crowd-cow-wagyu-bundle.jpg",
-  "belcampo-grass-fed-ribeye": "/products/belcampo-grass-fed-ribeye.webp",
-  "fishwife-tinned-trout": "/products/fishwife-tinned-trout.png",
+  "belcampo-grass-fed-ribeye": "/products/belcampo-grass-fed-ribeye.jpg",
+  "fishwife-tinned-trout": "/products/fishwife-tinned-trout.jpg",
   "patagonia-provisions-mussels":
     "/products/patagonia-provisions-mussels.jpg",
   "bobbie-organic-formula": "/products/bobbie-organic-formula.png",
