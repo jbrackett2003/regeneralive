@@ -533,10 +533,13 @@ function ImageInput({
 }) {
   const [uploading, setUploading] = useState(false);
   const [err, setErr] = useState<string | null>(null);
+  const [dragOver, setDragOver] = useState(false);
 
-  async function onFile(e: React.ChangeEvent<HTMLInputElement>) {
-    const file = e.target.files?.[0];
-    if (!file) return;
+  async function uploadFile(file: File) {
+    if (!file.type.startsWith("image/")) {
+      setErr("Please drop an image file.");
+      return;
+    }
     setUploading(true);
     setErr(null);
     try {
@@ -556,34 +559,91 @@ function ImageInput({
     }
   }
 
+  async function onFile(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    await uploadFile(file);
+  }
+
+  function onDrop(e: React.DragEvent<HTMLDivElement>) {
+    e.preventDefault();
+    setDragOver(false);
+    const file = e.dataTransfer.files?.[0];
+    if (file) void uploadFile(file);
+  }
+
+  async function onPaste(e: React.ClipboardEvent<HTMLDivElement>) {
+    const item = Array.from(e.clipboardData.items).find((i) =>
+      i.type.startsWith("image/"),
+    );
+    if (item) {
+      const file = item.getAsFile();
+      if (file) {
+        e.preventDefault();
+        await uploadFile(file);
+      }
+    }
+  }
+
   return (
-    <div className="space-y-2">
+    <div className="space-y-3" onPaste={onPaste}>
+      {/* Preview + dropzone */}
+      <div
+        onDragOver={(e) => {
+          e.preventDefault();
+          setDragOver(true);
+        }}
+        onDragLeave={() => setDragOver(false)}
+        onDrop={onDrop}
+        className={`relative flex items-center gap-4 rounded-xl border-2 border-dashed p-4 transition ${
+          dragOver
+            ? "border-moss bg-moss/5"
+            : "border-ink/15 bg-ink/[0.02] hover:border-ink/30"
+        }`}
+      >
+        {value ? (
+          <img
+            src={value}
+            alt=""
+            className="h-32 w-32 rounded-lg object-contain bg-white border border-ink/10 flex-shrink-0"
+          />
+        ) : (
+          <div className="h-32 w-32 rounded-lg bg-white border border-ink/10 flex-shrink-0 flex items-center justify-center text-ink/30 text-xs">
+            No image
+          </div>
+        )}
+        <div className="flex-1 min-w-0">
+          <p className="text-sm text-ink/80 mb-2">
+            {uploading
+              ? "Uploading..."
+              : "Drag & drop, paste, or "}
+            {!uploading && (
+              <label className="cursor-pointer text-moss-deep hover:underline font-medium">
+                choose file
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={onFile}
+                  disabled={uploading}
+                  className="hidden"
+                />
+              </label>
+            )}
+          </p>
+          <p className="text-xs text-ink/50">
+            PNG, JPG, WEBP or GIF · up to 8MB
+          </p>
+        </div>
+      </div>
+
+      {/* URL field */}
       <input
         type="url"
         value={value}
         onChange={(e) => onChange(e.target.value)}
         className="input font-mono text-xs"
-        placeholder="https://..."
+        placeholder="…or paste an image URL (https://…)"
       />
-      <div className="flex items-center gap-3">
-        <label className="cursor-pointer text-xs text-ink/70 hover:text-ink underline-offset-4 hover:underline">
-          {uploading ? "Uploading..." : "or upload from your computer"}
-          <input
-            type="file"
-            accept="image/*"
-            onChange={onFile}
-            disabled={uploading}
-            className="hidden"
-          />
-        </label>
-        {value && (
-          <img
-            src={value}
-            alt=""
-            className="h-12 w-12 rounded object-cover bg-ink/5"
-          />
-        )}
-      </div>
       {err && <p className="text-xs text-red-700">{err}</p>}
     </div>
   );
