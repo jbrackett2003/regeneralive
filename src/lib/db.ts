@@ -18,6 +18,7 @@ import { vivtrueHome } from "@/data/seed-vivtrue-home";
 import { seoArticles } from "@/data/seed-articles-2";
 import {
   PRODUCT_IMAGE_OVERRIDES,
+  PRODUCT_HIDDEN_SLUGS,
   PRODUCT_IMAGES_VERSION,
 } from "@/data/product-image-overrides";
 
@@ -572,13 +573,23 @@ function migrateApplyProductImages(db: Database.Database) {
   const update = db.prepare(
     "UPDATE products SET image_url = @image, updated_at = CURRENT_TIMESTAMP WHERE slug = @slug"
   );
+  const hide = db.prepare(
+    "UPDATE products SET is_hidden = 1, updated_at = CURRENT_TIMESTAMP WHERE slug = @slug"
+  );
   let applied = 0;
   let missing = 0;
+  let hidden = 0;
+  let hideMissing = 0;
   const tx = db.transaction(() => {
     for (const [slug, image] of Object.entries(PRODUCT_IMAGE_OVERRIDES)) {
       const r = update.run({ slug, image });
       if (r.changes > 0) applied++;
       else missing++;
+    }
+    for (const slug of PRODUCT_HIDDEN_SLUGS) {
+      const r = hide.run({ slug });
+      if (r.changes > 0) hidden++;
+      else hideMissing++;
     }
     db.prepare(
       "INSERT OR REPLACE INTO settings (key, value) VALUES (?, ?)"
@@ -586,8 +597,10 @@ function migrateApplyProductImages(db: Database.Database) {
   });
   tx();
   console.log(
-    `[db] Migration ${FLAG_KEY}: applied ${applied} product image override(s)` +
-      (missing > 0 ? `, ${missing} slug(s) not found in DB` : "")
+    `[db] Migration ${FLAG_KEY}: applied ${applied} image override(s)` +
+      (missing > 0 ? `, ${missing} slug(s) not found` : "") +
+      `; hid ${hidden} discontinued/duplicate slug(s)` +
+      (hideMissing > 0 ? ` (${hideMissing} not found)` : "")
   );
 }
 
