@@ -83,6 +83,7 @@ The site does not sell products directly. Every product card links out to the me
 | Brand system (theme, fonts, layout shell) | [specs/brand-system/document.md](brand-system/document.md) | planned |
 | Homepage | [specs/homepage/document.md](homepage/document.md) | planned |
 | Product catalog & detail | [specs/product-catalog/document.md](product-catalog/document.md) | planned |
+| Product search | [specs/product-search/document.md](product-search/document.md) | done |
 | Categories & shop browse | [specs/categories/document.md](categories/document.md) | planned |
 | Affiliate click tracker & redirector | [specs/affiliate-tracking/document.md](affiliate-tracking/document.md) | planned |
 | Journal (blog/articles) | [specs/journal/document.md](journal/document.md) | planned |

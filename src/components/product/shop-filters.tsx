@@ -1,8 +1,8 @@
 "use client";
 
+import { X } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useCallback } from "react";
-import { X } from "lucide-react";
 
 const goals = [
   { value: "sleep", label: "Sleep" },
@@ -50,7 +50,7 @@ export function ShopFilters({ categories }: Props) {
       else next.set(key, value);
       router.push(`/shop?${next.toString()}`);
     },
-    [router, sp]
+    [router, sp],
   );
 
   const activeCategory = sp.get("category") || "";
@@ -64,21 +64,6 @@ export function ShopFilters({ categories }: Props) {
 
   return (
     <div className="lg:sticky lg:top-28 space-y-8">
-      {/* Search */}
-      <div>
-        <label className="label-mono mb-3 block text-ink/55">Search</label>
-        <input
-          type="search"
-          defaultValue={activeQ}
-          onKeyDown={(e) => {
-            if (e.key === "Enter")
-              setParam("q", (e.target as HTMLInputElement).value || null);
-          }}
-          placeholder="Brand, product…"
-          className="w-full rounded-full border border-ink/15 bg-bone px-4 py-2.5 text-sm placeholder:text-ink/40 focus:outline-none focus:ring-2 focus:ring-moss/40"
-        />
-      </div>
-
       {/* Sort */}
       <div>
         <label className="label-mono mb-3 block text-ink/55">Sort</label>
@@ -108,7 +93,9 @@ export function ShopFilters({ categories }: Props) {
             type="button"
             onClick={() => setParam("category", null)}
             className={`block w-full text-left text-sm ${
-              !activeCategory ? "text-moss font-medium" : "text-ink/70 hover:text-ink"
+              !activeCategory
+                ? "text-moss font-medium"
+                : "text-ink/70 hover:text-ink"
             }`}
           >
             All categories

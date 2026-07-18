@@ -151,6 +151,33 @@ function initSchema(db: Database.Database) {
       is_active INTEGER NOT NULL DEFAULT 1,
       created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
     );
+
+    -- Per-string content overrides (in-place text edits across the site).
+    -- key:      stable identifier, e.g. "home.hero.h1", "footer.tagline"
+    -- value:    the override text (plain text, or html if kind='html')
+    -- kind:     'text' (default) | 'html' | 'markdown'
+    -- label:    human label shown in admin
+    -- page:     grouping bucket for admin UI, e.g. "home", "footer"
+    -- default_value: cached fallback so admin can preview default
+    CREATE TABLE IF NOT EXISTS content_blocks (
+      key TEXT PRIMARY KEY,
+      value TEXT NOT NULL,
+      kind TEXT NOT NULL DEFAULT 'text',
+      label TEXT,
+      page TEXT,
+      default_value TEXT,
+      updated_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
+    );
+
+    -- Full long-form markdown pages (About, Methodology, etc.). slug matches
+    -- the URL path. body is markdown; rendered with our existing renderer.
+    CREATE TABLE IF NOT EXISTS markdown_pages (
+      slug TEXT PRIMARY KEY,
+      title TEXT NOT NULL,
+      body TEXT NOT NULL,
+      meta_description TEXT,
+      updated_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
+    );
   `);
 
   // Seed from TypeScript data on first run (idempotent — only seeds if empty)

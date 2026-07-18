@@ -732,3 +732,230 @@ export function deletePromotion(id: string) {
   const db = getDb();
   db.prepare(`DELETE FROM promotions WHERE id = ?`).run(id);
 }
+
+// =====================================================================
+// Content blocks — per-string content overrides
+// =====================================================================
+
+export type ContentBlock = {
+  key: string;
+  value: string;
+  kind: "text" | "html" | "markdown";
+  label: string | null;
+  page: string | null;
+  defaultValue: string | null;
+  updatedAt: string;
+};
+
+/** Get a single block's value, falling back to the supplied default. */
+export function getBlockValue(key: string, fallback: string): string {
+  const db = getDb();
+  const row = db
+    .prepare(`SELECT value FROM content_blocks WHERE key = ?`)
+    .get(key) as { value: string } | undefined;
+  return row?.value ?? fallback;
+}
+
+/** Get many block values at once. */
+export function getBlockValues(
+  pairs: Array<{ key: string; fallback: string }>
+): Record<string, string> {
+  if (pairs.length === 0) return {};
+  const db = getDb();
+  const placeholders = pairs.map(() => "?").join(",");
+  const rows = db
+    .prepare(`SELECT key, value FROM content_blocks WHERE key IN (${placeholders})`)
+    .all(...pairs.map((p) => p.key)) as Array<{ key: string; value: string }>;
+  const map = new Map(rows.map((r) => [r.key, r.value]));
+  return Object.fromEntries(
+    pairs.map((p) => [p.key, map.get(p.key) ?? p.fallback])
+  );
+}
+
+/** Insert or update a block — also seeds default_value/label/page metadata. */
+export function setBlock(input: {
+  key: string;
+  value: string;
+  kind?: "text" | "html" | "markdown";
+  label?: string;
+  page?: string;
+  defaultValue?: string;
+}) {
+  const db = getDb();
+  db.prepare(
+    `INSERT INTO content_blocks
+       (key, value, kind, label, page, default_value, updated_at)
+     VALUES (?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP)
+     ON CONFLICT(key) DO UPDATE SET
+       value = excluded.value,
+       kind = COALESCE(excluded.kind, content_blocks.kind),
+       label = COALESCE(excluded.label, content_blocks.label),
+       page = COALESCE(excluded.page, content_blocks.page),
+       default_value = COALESCE(excluded.default_value, content_blocks.default_value),
+       updated_at = CURRENT_TIMESTAMP`
+  ).run(
+    input.key,
+    input.value,
+    input.kind ?? "text",
+    input.label ?? null,
+    input.page ?? null,
+    input.defaultValue ?? null
+  );
+}
+
+/** Register a block's metadata without changing its value. Call once per
+ *  EditableText render so admin sees every block even if user hasn't edited
+ *  it yet. */
+export function registerBlock(input: {
+  key: string;
+  defaultValue: string;
+  kind?: "text" | "html" | "markdown";
+  label?: string;
+  page?: string;
+}) {
+  const db = getDb();
+  // INSERT only if absent — preserves any existing override value
+  db.prepare(
+    `INSERT OR IGNORE INTO content_blocks
+       (key, value, kind, label, page, default_value)
+     VALUES (?, ?, ?, ?, ?, ?)`
+  ).run(
+    input.key,
+    input.defaultValue,
+    input.kind ?? "text",
+    input.label ?? null,
+    input.page ?? null,
+    input.defaultValue
+  );
+  // Always refresh metadata so renames in code propagate to admin
+  db.prepare(
+    `UPDATE content_blocks SET
+       default_value = ?,
+       label = COALESCE(?, label),
+       page = COALESCE(?, page),
+       kind = ?
+     WHERE key = ?`
+  ).run(
+    input.defaultValue,
+    input.label ?? null,
+    input.page ?? null,
+    input.kind ?? "text",
+    input.key
+  );
+}
+
+/** Reset a block back to its default by deleting the override (or rather
+ *  setting value back to default_value). */
+export function resetBlock(key: string): void {
+  const db = getDb();
+  const row = db
+    .prepare(`SELECT default_value FROM content_blocks WHERE key = ?`)
+    .get(key) as { default_value: string | null } | undefined;
+  if (!row) return;
+  if (row.default_value !== null) {
+    db.prepare(
+      `UPDATE content_blocks SET value = ?, updated_at = CURRENT_TIMESTAMP WHERE key = ?`
+    ).run(row.default_value, key);
+  }
+}
+
+/** List all known blocks for admin UI, grouped by page. */
+export function listContentBlocks(): ContentBlock[] {
+  const db = getDb();
+  return db
+    .prepare(`SELECT * FROM content_blocks ORDER BY page, key`)
+    .all()
+    .map((r: any) => ({
+      key: r.key,
+      value: r.value,
+      kind: r.kind,
+      label: r.label,
+      page: r.page,
+      defaultValue: r.default_value,
+      updatedAt: r.updated_at,
+    }));
+}
+
+// =====================================================================
+// Markdown pages — full long-form page bodies
+// =====================================================================
+
+export type MarkdownPage = {
+  slug: string;
+  title: string;
+  body: string;
+  metaDescription: string | null;
+  updatedAt: string;
+};
+
+export function getMarkdownPage(slug: string): MarkdownPage | null {
+  const db = getDb();
+  const r = db
+    .prepare(`SELECT * FROM markdown_pages WHERE slug = ?`)
+    .get(slug) as any;
+  if (!r) return null;
+  return {
+    slug: r.slug,
+    title: r.title,
+    body: r.body,
+    metaDescription: r.meta_description,
+    updatedAt: r.updated_at,
+  };
+}
+
+export function listMarkdownPages(): MarkdownPage[] {
+  const db = getDb();
+  return db
+    .prepare(`SELECT * FROM markdown_pages ORDER BY slug`)
+    .all()
+    .map((r: any) => ({
+      slug: r.slug,
+      title: r.title,
+      body: r.body,
+      metaDescription: r.meta_description,
+      updatedAt: r.updated_at,
+    }));
+}
+
+export function upsertMarkdownPage(input: {
+  slug: string;
+  title: string;
+  body: string;
+  metaDescription?: string | null;
+}) {
+  const db = getDb();
+  db.prepare(
+    `INSERT INTO markdown_pages (slug, title, body, meta_description, updated_at)
+     VALUES (?, ?, ?, ?, CURRENT_TIMESTAMP)
+     ON CONFLICT(slug) DO UPDATE SET
+       title = excluded.title,
+       body = excluded.body,
+       meta_description = excluded.meta_description,
+       updated_at = CURRENT_TIMESTAMP`
+  ).run(
+    input.slug,
+    input.title,
+    input.body,
+    input.metaDescription ?? null
+  );
+}
+
+/** Idempotent seed — only inserts if slug is absent. Used to populate the
+ *  DB with hard-coded page bodies on first run / first deploy. */
+export function seedMarkdownPageIfAbsent(input: {
+  slug: string;
+  title: string;
+  body: string;
+  metaDescription?: string | null;
+}) {
+  const db = getDb();
+  db.prepare(
+    `INSERT OR IGNORE INTO markdown_pages (slug, title, body, meta_description)
+     VALUES (?, ?, ?, ?)`
+  ).run(
+    input.slug,
+    input.title,
+    input.body,
+    input.metaDescription ?? null
+  );
+}

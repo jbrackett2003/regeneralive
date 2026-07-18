@@ -1,11 +1,11 @@
 "use client";
 
+import { Menu, Search, X } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
-import { Menu, X } from "lucide-react";
-import { Logo } from "./logo";
 import { HeaderShopMenu } from "./header-shop-menu";
+import { Logo } from "./logo";
 
 interface CategoryItem {
   slug: string;
@@ -22,6 +22,7 @@ const otherNav = [
 export function Header({ categories }: { categories: CategoryItem[] }) {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
+  const [searchOpen, setSearchOpen] = useState(false);
   const pathname = usePathname() || "/";
 
   useEffect(() => {
@@ -32,18 +33,21 @@ export function Header({ categories }: { categories: CategoryItem[] }) {
   }, []);
 
   // Close mobile menu on route change
+  // biome-ignore lint/correctness/useExhaustiveDependencies: pathname intentionally triggers menu closure after navigation.
   useEffect(() => {
     setOpen(false);
+    setSearchOpen(false);
   }, [pathname]);
 
   const isActive = (href: string) =>
     href === "/" ? pathname === "/" : pathname.startsWith(href);
 
-  const shopActive = pathname.startsWith("/shop") || pathname.startsWith("/category");
+  const shopActive =
+    pathname.startsWith("/shop") || pathname.startsWith("/category");
 
   return (
     <header
-      className={`sticky top-0 z-40 transition-all duration-300 ${
+      className={`sticky top-0 transition-all duration-300 ${open ? "z-[70]" : "z-40"} ${
         scrolled
           ? "bg-bone/85 backdrop-blur-md border-b border-ink/10"
           : "bg-transparent"
@@ -75,7 +79,20 @@ export function Header({ categories }: { categories: CategoryItem[] }) {
           })}
         </nav>
 
-        <div className="hidden md:flex">
+        <div className="hidden items-center gap-2 md:flex">
+          <button
+            type="button"
+            aria-label={searchOpen ? "Close product search" : "Search products"}
+            aria-expanded={searchOpen}
+            onClick={() => setSearchOpen((current) => !current)}
+            className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-ink/15 text-ink transition-colors hover:border-moss hover:text-moss focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-moss/45"
+          >
+            {searchOpen ? (
+              <X className="h-4 w-4" />
+            ) : (
+              <Search className="h-4 w-4" />
+            )}
+          </button>
           <Link href="/#newsletter" className="btn-primary !py-2 !px-5">
             Subscribe
           </Link>
@@ -90,6 +107,32 @@ export function Header({ categories }: { categories: CategoryItem[] }) {
           <Menu className="h-5 w-5" />
         </button>
       </div>
+
+      {searchOpen && (
+        <div className="hidden border-y border-ink/10 bg-bone/95 py-4 shadow-[0_16px_30px_rgba(28,26,20,0.06)] backdrop-blur-md md:block">
+          <form
+            action="/shop"
+            method="get"
+            className="container-x flex max-w-3xl items-center gap-3"
+          >
+            <Search className="h-5 w-5 shrink-0 text-moss" aria-hidden="true" />
+            <label htmlFor="header-product-search" className="sr-only">
+              Search products
+            </label>
+            <input
+              id="header-product-search"
+              name="q"
+              type="search"
+              autoFocus
+              placeholder="Search products, brands, ingredients…"
+              className="min-w-0 flex-1 bg-transparent py-2 text-base text-ink outline-none placeholder:text-ink/40"
+            />
+            <button type="submit" className="btn-primary !px-5 !py-2.5">
+              Search
+            </button>
+          </form>
+        </div>
+      )}
 
       {/* Mobile menu */}
       {open && (
@@ -106,6 +149,33 @@ export function Header({ categories }: { categories: CategoryItem[] }) {
             </button>
           </div>
           <nav className="container-x flex flex-col gap-1 pb-20 pt-6">
+            <form action="/shop" method="get" className="mb-5">
+              <label
+                htmlFor="mobile-product-search"
+                className="label-mono mb-2 block text-ink/50"
+              >
+                Search products
+              </label>
+              <div className="flex items-center rounded-full border border-ink/15 bg-white/50 p-1.5 focus-within:border-moss focus-within:ring-2 focus-within:ring-moss/20">
+                <Search
+                  className="ml-3 h-4 w-4 shrink-0 text-moss"
+                  aria-hidden="true"
+                />
+                <input
+                  id="mobile-product-search"
+                  name="q"
+                  type="search"
+                  placeholder="Product, brand, ingredient…"
+                  className="min-w-0 flex-1 bg-transparent px-3 py-2 text-sm text-ink outline-none placeholder:text-ink/40"
+                />
+                <button
+                  type="submit"
+                  className="rounded-full bg-ink px-4 py-2 text-xs font-medium text-bone"
+                >
+                  Search
+                </button>
+              </div>
+            </form>
             <Link
               href="/shop"
               onClick={() => setOpen(false)}

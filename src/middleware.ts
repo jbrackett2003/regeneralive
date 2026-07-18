@@ -59,21 +59,33 @@ export async function middleware(req: NextRequest) {
   const reqHeaders = new Headers(req.headers);
   reqHeaders.set("x-pathname", pathname);
 
-  // Only guard /admin and /admin/* (but allow /admin/login itself)
-  if (!pathname.startsWith("/admin")) {
+  // Gate /admin/* (UI) and /api/admin/* (mutation endpoints).
+  const isAdminUi = pathname.startsWith("/admin");
+  const isAdminApi = pathname.startsWith("/api/admin");
+  if (!isAdminUi && !isAdminApi) {
     return NextResponse.next({ request: { headers: reqHeaders } });
   }
-  if (pathname === "/admin/login") {
+  // Allow public sub-paths needed during login itself
+  if (pathname === "/admin/login" || pathname === "/api/admin/login") {
     return NextResponse.next({ request: { headers: reqHeaders } });
   }
 
   const secret = process.env.SESSION_SECRET;
   if (!secret) {
+    if (isAdminApi) {
+      return NextResponse.json(
+        { error: "Server not configured" },
+        { status: 500 }
+      );
+    }
     return NextResponse.redirect(new URL("/admin/login?err=config", req.url));
   }
   const token = req.cookies.get(SESSION_COOKIE)?.value;
   const ok = await isValid(token, secret);
   if (!ok) {
+    if (isAdminApi) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
     const url = new URL("/admin/login", req.url);
     url.searchParams.set("next", pathname);
     return NextResponse.redirect(url);
