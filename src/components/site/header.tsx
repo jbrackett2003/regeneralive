@@ -22,7 +22,6 @@ const otherNav = [
 export function Header({ categories }: { categories: CategoryItem[] }) {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
-  const [searchOpen, setSearchOpen] = useState(false);
   const pathname = usePathname() || "/";
 
   useEffect(() => {
@@ -36,7 +35,6 @@ export function Header({ categories }: { categories: CategoryItem[] }) {
   // biome-ignore lint/correctness/useExhaustiveDependencies: pathname intentionally triggers menu closure after navigation.
   useEffect(() => {
     setOpen(false);
-    setSearchOpen(false);
   }, [pathname]);
 
   const isActive = (href: string) =>
@@ -56,7 +54,7 @@ export function Header({ categories }: { categories: CategoryItem[] }) {
       <div className="container-x flex h-16 items-center justify-between md:h-20">
         <Logo />
 
-        <nav className="hidden items-center gap-10 md:flex">
+        <nav className="hidden items-center gap-7 md:flex xl:gap-10">
           <HeaderShopMenu categories={categories} active={shopActive} />
           {otherNav.map((n) => {
             const active = isActive(n.href);
@@ -80,42 +78,12 @@ export function Header({ categories }: { categories: CategoryItem[] }) {
         </nav>
 
         <div className="hidden items-center gap-2 md:flex">
-          <button
-            type="button"
-            aria-label={searchOpen ? "Close product search" : "Search products"}
-            aria-expanded={searchOpen}
-            onClick={() => setSearchOpen((current) => !current)}
-            className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-ink/15 text-ink transition-colors hover:border-moss hover:text-moss focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-moss/45"
-          >
-            {searchOpen ? (
-              <X className="h-4 w-4" />
-            ) : (
-              <Search className="h-4 w-4" />
-            )}
-          </button>
-          <Link href="/#newsletter" className="btn-primary !py-2 !px-5">
-            Subscribe
-          </Link>
-        </div>
-
-        <button
-          type="button"
-          aria-label="Open menu"
-          className="md:hidden rounded-full border border-ink/15 p-2"
-          onClick={() => setOpen(true)}
-        >
-          <Menu className="h-5 w-5" />
-        </button>
-      </div>
-
-      {searchOpen && (
-        <div className="hidden border-y border-ink/10 bg-bone/95 py-4 shadow-[0_16px_30px_rgba(28,26,20,0.06)] backdrop-blur-md md:block">
           <form
             action="/shop"
             method="get"
-            className="container-x flex max-w-3xl items-center gap-3"
+            className="hidden w-[min(30vw,21rem)] items-center rounded-full border border-ink/15 bg-bone/70 p-1.5 shadow-[0_8px_20px_rgba(28,26,20,0.04)] transition-all focus-within:border-moss focus-within:bg-bone focus-within:ring-2 focus-within:ring-moss/20 lg:flex"
           >
-            <Search className="h-5 w-5 shrink-0 text-moss" aria-hidden="true" />
+            <Search className="ml-3 h-4 w-4 shrink-0 text-moss" aria-hidden="true" />
             <label htmlFor="header-product-search" className="sr-only">
               Search products
             </label>
@@ -123,16 +91,47 @@ export function Header({ categories }: { categories: CategoryItem[] }) {
               id="header-product-search"
               name="q"
               type="search"
-              autoFocus
-              placeholder="Search products, brands, ingredients…"
-              className="min-w-0 flex-1 bg-transparent py-2 text-base text-ink outline-none placeholder:text-ink/40"
+              placeholder="Search products"
+              className="min-w-0 flex-1 bg-transparent px-3 py-1.5 text-sm text-ink outline-none placeholder:text-ink/45"
             />
-            <button type="submit" className="btn-primary !px-5 !py-2.5">
+            <button
+              type="submit"
+              className="rounded-full bg-ink px-4 py-1.5 text-xs font-medium text-bone transition-colors hover:bg-moss"
+            >
               Search
             </button>
           </form>
+          <Link
+            href="/shop"
+            aria-label="Search products"
+            className="inline-flex h-10 items-center justify-center gap-2 rounded-full border border-ink/15 px-4 text-sm font-medium text-ink transition-colors hover:border-moss hover:text-moss focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-moss/45 lg:hidden"
+          >
+            <Search className="h-4 w-4" />
+            Search
+          </Link>
+          <Link href="/#newsletter" className="btn-primary !py-2 !px-5">
+            Subscribe
+          </Link>
         </div>
-      )}
+
+        <div className="flex items-center gap-2 md:hidden">
+          <Link
+            href="/shop"
+            aria-label="Search products"
+            className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-ink/15 text-ink"
+          >
+            <Search className="h-5 w-5" />
+          </Link>
+          <button
+            type="button"
+            aria-label="Open menu"
+            className="rounded-full border border-ink/15 p-2"
+            onClick={() => setOpen(true)}
+          >
+            <Menu className="h-5 w-5" />
+          </button>
+        </div>
+      </div>
 
       {/* Mobile menu */}
       {open && (

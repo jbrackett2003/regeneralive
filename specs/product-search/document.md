@@ -14,7 +14,7 @@ Give visitors a prominent, accessible way to find products by name, brand, or pr
 ## Scope / non-goals
 
 ### Scope
-- Global header search control on desktop and mobile.
+- Persistent global header search bar on large desktop screens, a clearly labeled Search shortcut on medium screens, and a mobile search shortcut plus mobile-menu search form.
 - Prominent search form on the shop page.
 - Case-insensitive, whitespace-normalized matching against the local catalog.
 - URL-driven results at `/shop?q=<term>`.
@@ -27,7 +27,7 @@ Give visitors a prominent, accessible way to find products by name, brand, or pr
 
 ## User flows / UX / design notes
 
-1. A visitor opens search from the header, enters a product or brand, and submits.
+1. A visitor uses the always-visible desktop header search bar, enters a product or brand, and submits.
 2. The site navigates to `/shop?q=...`, displays the active query, result count, and matching cards.
 3. A visitor can refine results with existing filters or clear all filters.
 4. On the shop page, a large search field appears above the catalog controls.
@@ -44,7 +44,7 @@ Search controls use semantic GET forms, visible labels or accessible names, keyb
 - Existing category, brand, deal, certification, goal, and sort filters continue to compose with search.
 - The displayed result count updates to the filtered count.
 - The empty state includes the submitted query and a link to clear search/filters.
-- Header search closes after route navigation and is keyboard accessible.
+- Header search is immediately visible on large desktop screens, has a clearly labeled fallback on narrower desktop/tablet widths, and is keyboard accessible.
 
 ## Data model / schema
 
@@ -69,7 +69,7 @@ No new API. The shop route accepts:
 
 - A search for a known product name returns that product.
 - A search for a known brand returns products from that brand.
-- Search can be opened and submitted from the desktop and mobile header.
+- Search can be discovered from the desktop/tablet/mobile header and submitted from the visible desktop header bar or mobile menu form.
 - Search can be submitted from the shop page with mouse or keyboard.
 - The query remains visible after navigation.
 - A nonsense query produces a useful zero-results state.
@@ -82,7 +82,7 @@ No new API. The shop route accepts:
 3. Search with mixed case and surrounding spaces; verify normalization.
 4. Search a nonsense string; verify zero-results copy and clear action.
 5. Combine search with one existing filter; verify both constraints apply.
-6. Open and submit header search with keyboard.
+6. Submit the persistent desktop header search with keyboard; verify the tablet/mobile header Search shortcut navigates visitors to the shop search form.
 7. Verify desktop and mobile layouts and visible focus states.
 8. Check browser console and network logs for errors.
 
